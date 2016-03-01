@@ -104,8 +104,8 @@ def load_data_wrapper():
     test_inputs = [np.reshape(x, (784, 1)) for x in te_image]
     test_data = zip(test_inputs, te_label)
         
-    #return(tr_image, tr_label, te_image, te_label)     # return images and labels
-    return (training_data, test_data)                   # return combined image/labels
+    return(tr_image, tr_label, te_image, te_label)     # return images and labels
+    #return (training_data, test_data)                   # return combined image/labels
    
   
     
@@ -123,5 +123,5 @@ def vectorized_result(j):
 
 # read in data    
 training_data, test_data = load_data()
-print("training/testing?", len(training_data), len(test_data))
+print("Successfully loaded training/testing?", len(training_data), len(test_data))
 

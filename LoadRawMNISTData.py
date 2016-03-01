@@ -1,7 +1,7 @@
 #!/python
 
 # found at http://g.sweyla.com/blog/2012/mnist-numpy/
-
+# Adapted from: http://abel.ee.ucla.edu/cvxopt/_downloads/mnist.py
 
 import pickle, gzip, numpy
 import os, struct
@@ -10,12 +10,7 @@ from numpy import append, array, int8, uint8, zeros
 
 
 def load_mnist(dataset="training", digits=numpy.arange(10), path="."):
-    """
-    Loads MNIST files into 3D numpy arrays
-
-    Adapted from: http://abel.ee.ucla.edu/cvxopt/_downloads/mnist.py
-    """
-
+  
     if dataset == "training":
         fname_img = os.path.join(path, 'train-images-idx3-ubyte')
         fname_lbl = os.path.join(path, 'train-labels-idx1-ubyte')

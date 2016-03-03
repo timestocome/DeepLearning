@@ -12,23 +12,29 @@ import theano
 import theano.tensor as T
 
 
-# myy stuff
-import LoadData
-
-
-
+#################################################################################################
+# simple back propagation network
+# best scores ~ 91% on test, validation sets
+# running longer doesn't help, 
+# smaller batches ~ 50 helps accuracy, no improvement going smaller
 
 #################################################################################################
-# constants 
+# parameters used to tweak learning
 ##################################################################################################
-learning_rate = 0.13
-n_epochs = 1000
-batch_size = 600
+learning_rate = 0.30    # slight improvements adjusting this 
+n_epochs = 2000
+batch_size = 50         # decreasing batch size gives largest improvement performance
+                        # is also brings testing and validation scores closer together
 
 #################################################################################################
 # load up data 
+# MNIST dataset, images are 28x28 images, 0.0-1.0 0 being blank, 1.0 darkest mark on image
+# labels are single ints 0-9
+# training set is 50,000 images and labels
+# testing and validation sets are 10,000 images and labels each
 ##################################################################################################
  
+# pickled, zipped data file 
 filename = 'mnist.pkl.gz'
     
 # Load the dataset
@@ -56,7 +62,6 @@ test_set_x, test_set_y = shared_dataset(test_set)
 valid_set_x, valid_set_y = shared_dataset(valid_set)
 train_set_x, train_set_y = shared_dataset(train_set)
 
-
 datasets = [(train_set_x, train_set_y), (valid_set_x, valid_set_y), (test_set_x, test_set_y)]
    
 # set up datasets
@@ -64,12 +69,19 @@ train_set_x, train_set_y = datasets[0]
 valid_set_x, valid_set_y = datasets[1]
 test_set_x, test_set_y = datasets[2]
     
+    
 # set up constants
-# // divide and round down to floor
+# double front slash (//) divide and round down to floor
 n_train_batches = train_set_x.get_value(borrow=True).shape[0] // batch_size
 n_valid_batches = valid_set_x.get_value(borrow=True).shape[0] // batch_size
 n_test_batches = test_set_x.get_value(borrow=True).shape[0] // batch_size
-        
+
+# quick look at what's inside the data set        
+#print(train_set_x[0].eval())
+#print((train_set_y[0].eval()))
+#print(train_set_y.shape.eval())
+#print(test_set_y.shape.eval())
+#print(valid_set_y.shape.eval())
          
 ##########################################################################################
 # Logistic Regression 
@@ -104,8 +116,6 @@ class LogisticRegression(object):
     
     
     def sgd_optimization_mnist():    
-    
-     
     
         # build the model
         print("building model...")
@@ -145,9 +155,9 @@ class LogisticRegression(object):
                                                })
                                                
         print("Training model.........")
-        # early stopping test values
+        # initialize loop variables for stopping and checking progress
         patience = 5000                 # minimum number of examples to use
-        patience_increase = 2           # wait at least this long before updtaeing best
+        patience_increase = 2           # wait at least this long before updtating best
         improvement_threshold = 0.995   # min significant improvement
         validation_frequency = min(n_train_batches, patience)
         best_validation_loss = np.inf
@@ -156,20 +166,24 @@ class LogisticRegression(object):
         done_looping = False
         epoch = 0
     
+        # for each training loop
         while ( epoch < n_epochs ) and ( not done_looping ):        
             epoch = epoch + 1
         
+            # for each mini batch in the full data set
             for minibatch_index in range(n_train_batches):
                 
+                # train then move to next batch
                 minibatch_avg_cost = train_model(minibatch_index)
                 iter = (epoch - 1) * n_train_batches + minibatch_index
                 
+                # check progress
                 if (iter + 1) % validation_frequency == 0:
                 
                     validation_losses = [validate_model(i) for i in range(n_valid_batches)]
 
-                    this_validation_loss = np.mean(validation_losses)
-                    print('epoch %i, minibatch %i/%i, validation error %f %%' % 
+                    this_validation_loss = 1.0 - np.mean(validation_losses)
+                    print('epoch %i, minibatch %i/%i, current accuracy %f %%' % 
                             (epoch, minibatch_index+1, n_train_batches, this_validation_loss*100.))
                             
                     if this_validation_loss < best_validation_loss:
@@ -179,7 +193,7 @@ class LogisticRegression(object):
                         best_validation_loss = this_validation_loss
                     
                         test_losses = [test_model(i) for i in range(n_test_batches)]
-                        test_score = np.mean(test_losses)
+                        test_score = 1.0 - np.mean(test_losses)
                     
                         print(('     epoch %i, minibatch %i/%i, test error of best model %f %%') % 
                                     (epoch, minibatch_index + 1, n_train_batches, test_score * 100.))
@@ -199,31 +213,13 @@ class LogisticRegression(object):
                     (epoch, 1. * epoch / (end_time - start_time))), file=sys.stderr)
                     
   
-  
-    def predict():                  
-
-        classifier = pickle.load(open('best_model.pkl'))
-    
-        predict_model = theano.function(inputs=[classifier.input], outputs=classifier.y_pred)
-    
-        test_x, test_y = datasets[1]
-        validate_x, validate_y = datasets[2]
-    
-        predicted_test_values = predict_model(test_x)
-        predicted_validate_values = predict_model(validate_x)
-    
-        ########
-        #compare predicted to correct labels and print accuracy for both sets
-    
-    
-    
     
     
     
 ###########################################################################################
-# create, train, save network
+# run the network on the dataset
 LogisticRegression.sgd_optimization_mnist()
 
-# make predictions, check accuracy
+
 
 

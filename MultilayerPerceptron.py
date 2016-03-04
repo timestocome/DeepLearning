@@ -5,7 +5,7 @@
 import numpy as np
 import pickle, gzip
 import timeit
-import sys
+import sys, os
 
 
 # 3rd party
@@ -100,14 +100,14 @@ class HiddenLayer(object):
     # activation can be T.tanh or T.nnet.sigmoid
     # W = weights
     # b = bias
-    def __init__(self, rng, input, n_in, n_out, W=None, b=None, activiation=T.tanh):
+    def __init__(self, rng, input, n_in, n_out, W=None, b=None, activation=T.tanh):
         
         self.input = input
         
         # initial weights sqrt( +/-6. / (n_in + n_hidden)), multiply by 4 for sigmoid
         if W is None:
             W_values = np.asarray(rng.uniform(
-                                    low = np.sqrt(6./(n_in + n_out)),
+                                    low = -np.sqrt(6./(n_in + n_out)),
                                     high = np.sqrt(6. /(n_in + n_out)),
                                     size = (n_in, n_out)
                                     ), dtype = theano.config.floatX)
@@ -118,6 +118,9 @@ class HiddenLayer(object):
         if b is None:
             b_values = np.zeros((n_out,), dtype=theano.config.floatX)
             b = theano.shared(value = b_values, name = 'b', borrow = True)
+        
+        self.W = W
+        self.b = b
         
         # calculate linear output using dot product + b, else use tanh or sigmoid
         lin_output = T.dot(input, self.W) + self.b
@@ -155,7 +158,7 @@ class MLP(object):
                    
             # regularization
             self.L1 = ( abs(self.hiddenLayer.W).sum() + abs(self.logisticRegressionLayer.W).sum() )
-            self.L2 = ( (self.hiddenLayer.W ** 2).sum() + (self.logisticRegressionLayer ** 2).sum() )
+            self.L2 = ( (self.hiddenLayer.W ** 2).sum() + (self.logisticRegressionLayer.W ** 2).sum() )
             
             # measure error
             self.negative_log_likelihood = ( self.logisticRegressionLayer.negative_log_likelihood )
@@ -175,11 +178,11 @@ class MLP(object):
 ##########################################################################################
 class LogisticRegression(object):
 
-    def __init__(self, input, n_inputs, n_outputs):
+    def __init__(self, input, n_in, n_out):
     
         # initialize parameters 
-        self.W = theano.shared(value=np.zeros((n_inputs, n_outputs), dtype=theano.config.floatX), name='W', borrow=True)
-        self.b = theano.shared(value=np.zeros((n_outputs,), dtype=theano.config.floatX), name='b', borrow=True)
+        self.W = theano.shared(value=np.zeros((n_in, n_out), dtype=theano.config.floatX), name='W', borrow=True)
+        self.b = theano.shared(value=np.zeros((n_out,), dtype=theano.config.floatX), name='b', borrow=True)
    
         # map input to hyperplane to determine output
         self.p_y_given_x = T.nnet.softmax(T.dot(input, self.W) + self.b)
@@ -216,17 +219,28 @@ class LogisticRegression(object):
         classifier = LogisticRegression(input=x, n_inputs=28*28, n_outputs=10)
     
         cost = classifier.negative_log_likelihood(y)
+        
+         # by the model on a minibatch
+        test_model = theano.function(
+            inputs=[index],
+            outputs=classifier.errors(y),
+            givens={
+                x: test_set_x[index * batch_size:(index + 1) * batch_size],
+                y: test_set_y[index * batch_size:(index + 1) * batch_size]
+            }
+        )
+
+        validate_model = theano.function(
+            inputs=[index],
+            outputs=classifier.errors(y),
+            givens={
+                x: valid_set_x[index * batch_size:(index + 1) * batch_size],
+                y: valid_set_y[index * batch_size:(index + 1) * batch_size]
+            }
+        )
+
     
-        test_model = theano.function(inputs=[index], outputs=classifier.errors(y), 
-                                givens={    x: test_set_x[index * batch_size:(index+1) * batch_size],
-                                            y: test_set_y[index * batch_size:(index+1) * batch_size]
-                                            })
-                                            
-        validate_model = theano.function(inputs=[index], outputs=classifier.errors(y),
-                                givens={     x: valid_set_x[index * batch_size:(index+1) * batch_size],
-                                             y: valid_set_y[index * batch_size:(index+1) * batch_size]
-                                             })
-                                                 
+                                    
         # compute gradient of cost with respect to theta = (W, b)
         g_W = T.grad(cost=cost, wrt=classifier.W)
         g_b = T.grad(cost=cost, wrt=classifier.b)
@@ -236,7 +250,7 @@ class LogisticRegression(object):
                 (classifier.b, classifier.b - learning_rate * g_b)]
                 
         # training model description
-        train_model = theano.function( inputs=[index], outputs=cost, updates=updates, 
+        train_model = theano.function(inputs=[index], outputs=cost, updates=updates, 
                                 givens={       x: train_set_x[index * batch_size:(index+1) * batch_size],
                                                y: train_set_y[index * batch_size:(index+1) * batch_size]
                                                })
@@ -312,30 +326,35 @@ def test_mlp():
     ##################################################
     print("building the model......")
     
-    index = T.lscalar                   # index to minibatch
+    index = T.lscalar()                   # index to minibatch
     x = T.matrix('x')                   # data in
     y = T.ivector('y')                  # output classes/labels
     rng = np.random.RandomState(42)     # seed for random
 
     classifier = MLP( rng=rng, input=x, n_in=28*28, n_hidden=n_hidden, n_out=10)
-    cost = ( classifier.negative_log_likelihood(y) + L1_reg * classifier.L1 + L2_reg * classifier.L2 )
+    cost = ( classifier.negative_log_likelihood(y) + (L1_reg * classifier.L1) + (L2_reg * classifier.L2) )
     
-    test_model = theano.function( inputs=[index], outputs=classifier.errors(y), 
-                    givens={
-                        x: test_set_x[index * batch_size:(index + 1) * batch_size],
-                        y: test_set_y[index * batch_size:(index + 1) * batch_size]
-                    })
-    validate_model = theano.function( inputs=[index], outputs=classifier.errors(y),
-                    givens={
-                        x: valid_set_x[index * batch_size:(index + 1) * batch_size],
-                        y: valid_set_y[index * batch_size:(index + 1) * batch_size]
-                    })
+    test_model = theano.function(
+            inputs=[index],
+            outputs=classifier.errors(y),
+            givens={
+                x: test_set_x[index * batch_size:(index + 1) * batch_size],
+                y: test_set_y[index * batch_size:(index + 1) * batch_size]
+            })
+
+    validate_model = theano.function(
+            inputs=[index],
+            outputs=classifier.errors(y),
+            givens={
+                x: valid_set_x[index * batch_size:(index + 1) * batch_size],
+                y: valid_set_y[index * batch_size:(index + 1) * batch_size]
+            })
                     
     # compute gradient of cost                
     gradients = [T.grad(cost, param) for param in classifier.params]
-    updates = [(param, param - learning_rate * g) for param, g in zip(classifier, params, gradients)]
+    updates = [(param, param - learning_rate * g) for param, g in zip(classifier.params, gradients)]
     
-    train_model = thean.function( inputs=[index], outputs=cost, updates=updates,
+    train_model = theano.function(inputs=[index], outputs=cost, updates=updates,
                 givens={
                     x: train_set_x[index * batch_size:(index + 1) * batch_size],
                     y: train_set_y[index * batch_size:(index + 1) * batch_size]
@@ -379,9 +398,9 @@ def test_mlp():
             
                 # compute zero-one loss on validation set
                 validation_losses = [validate_model(i) for i in range(n_valid_batches)]
-                this_validation_loss = numpy.mean(validation_losses)
+                this_validation_loss = 1.0 - np.mean(validation_losses)
 
-                print('epoch %i, minibatch %i/%i, validation error %f %%' %
+                print('epoch %i, minibatch %i/%i, accuracy %f %%' %
                     ( epoch, minibatch_index + 1, n_train_batches, this_validation_loss * 100.))
 
                 # if we got the best validation score until now
@@ -395,9 +414,9 @@ def test_mlp():
 
                     # test it on the test set
                     test_losses = [test_model(i) for i in range(n_test_batches)]
-                    test_score = numpy.mean(test_losses)
+                    test_score = 1.0 - np.mean(test_losses)
 
-                    print(('     epoch %i, minibatch %i/%i, test error of best model %f %%') %
+                    print(('     epoch %i, minibatch %i/%i, best accuracy %f %%') %
                           (epoch, minibatch_index + 1, n_train_batches, test_score * 100.))
 
             if patience <= iter:

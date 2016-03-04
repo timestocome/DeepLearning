@@ -28,12 +28,13 @@ import theano.tensor as T
 #################################################################################################
 # parameters used to tweak learning
 ##################################################################################################
-learning_rate = 0.01    # how fast does net converge - bounce out of local mins
-L1_reg = 0.00           # lambda - scaling factor for regularizations
-L2_reg = 0.0001
-n_epochs = 1000         # number of times we loop through full training set
-batch_size = 20         # number of training examples per batch - smaller is slower but better accuracy 
-n_hidden = 500          # number of nodes in hidden layer
+learning_rate = 0.3    # how fast does net converge - bounce out of local mins
+                        # 0.01 ~ 90% accuracy, 0.1 ~ 92%. 1.0 drops accuracy to 75%, 0.5 ~ 94%
+L1_reg = 0.0000         # lambda - scaling factor for regularizations, slightly better accuracy
+L2_reg = 0.0001         #     with L2 than L1 
+n_epochs = 1000         # max number of times we loop through full training set
+batch_size = 20         # number of training examples per batch - smaller is slower but better accuracy( above 20)
+n_hidden = 100          # number of nodes in hidden layer increasing or decreasing from 100 slowly drops accuracy
 
 
 #################################################################################################
@@ -132,6 +133,41 @@ class HiddenLayer(object):
         
    
      
+##########################################################################################
+# Logistic Regression Layer
+# activation = softmax(dot(x, w) + b)
+##########################################################################################
+class LogisticRegression(object):
+
+    def __init__(self, input, n_in, n_out):
+    
+        # initialize parameters 
+        self.W = theano.shared(value=np.zeros((n_in, n_out), dtype=theano.config.floatX), name='W', borrow=True)
+        self.b = theano.shared(value=np.zeros((n_out,), dtype=theano.config.floatX), name='b', borrow=True)
+   
+        # map input to hyperplane to determine output
+        self.p_y_given_x = T.nnet.softmax(T.dot(input, self.W) + self.b)
+   
+        # compute predicted class
+        self.y_predict = T.argmax(self.p_y_given_x, axis=1)
+   
+        self.params = [self.W, self.b]
+        self.input = input
+   
+
+
+    # using mean instead of sum allows for different batch sizes with out adjusting learning rate
+    def negative_log_likelihood(self, y):
+        return -T.mean(T.log(self.p_y_given_x)[T.arange(y.shape[0]), y])
+    
+
+    # number of errors in the mini batch
+    def errors(self, y):
+        return T.mean(T.neq(self.y_predict, y))
+    
+     
+     
+     
          
 ##########################################################################################
 # MultiLayer Perceptron Class
@@ -170,149 +206,6 @@ class MLP(object):
             # data in
             self.input = input
             
-     
-     
-##########################################################################################
-# Logistic Regression 
-# activation = softmax(dot(x, w) + b)
-##########################################################################################
-class LogisticRegression(object):
-
-    def __init__(self, input, n_in, n_out):
-    
-        # initialize parameters 
-        self.W = theano.shared(value=np.zeros((n_in, n_out), dtype=theano.config.floatX), name='W', borrow=True)
-        self.b = theano.shared(value=np.zeros((n_out,), dtype=theano.config.floatX), name='b', borrow=True)
-   
-        # map input to hyperplane to determine output
-        self.p_y_given_x = T.nnet.softmax(T.dot(input, self.W) + self.b)
-   
-        # compute predicted class
-        self.y_predict = T.argmax(self.p_y_given_x, axis=1)
-   
-        self.params = [self.W, self.b]
-        self.input = input
-   
-
-
-    # using mean instead of sum allows for different batch sizes with out adjusting learning rate
-    def negative_log_likelihood(self, y):
-        return -T.mean(T.log(self.p_y_given_x)[T.arange(y.shape[0]), y])
-    
-
-    # number of errors in the mini batch
-    def errors(self, y):
-        return T.mean(T.neq(self.y_predict, y))
-    
-    
-    def sgd_optimization_mnist():    
-    
-        # build the model
-        print("building model...")
-    
-        # setup variables
-        index = T.lscalar()     # index to a mini batch
-        x = T.matrix('x')       # image data
-        y = T.ivector('y')      # labels
-    
-
-        classifier = LogisticRegression(input=x, n_inputs=28*28, n_outputs=10)
-    
-        cost = classifier.negative_log_likelihood(y)
-        
-         # by the model on a minibatch
-        test_model = theano.function(
-            inputs=[index],
-            outputs=classifier.errors(y),
-            givens={
-                x: test_set_x[index * batch_size:(index + 1) * batch_size],
-                y: test_set_y[index * batch_size:(index + 1) * batch_size]
-            }
-        )
-
-        validate_model = theano.function(
-            inputs=[index],
-            outputs=classifier.errors(y),
-            givens={
-                x: valid_set_x[index * batch_size:(index + 1) * batch_size],
-                y: valid_set_y[index * batch_size:(index + 1) * batch_size]
-            }
-        )
-
-    
-                                    
-        # compute gradient of cost with respect to theta = (W, b)
-        g_W = T.grad(cost=cost, wrt=classifier.W)
-        g_b = T.grad(cost=cost, wrt=classifier.b)
-    
-        # update weights and biases
-        updates = [(classifier.W, classifier.W - learning_rate * g_W),
-                (classifier.b, classifier.b - learning_rate * g_b)]
-                
-        # training model description
-        train_model = theano.function(inputs=[index], outputs=cost, updates=updates, 
-                                givens={       x: train_set_x[index * batch_size:(index+1) * batch_size],
-                                               y: train_set_y[index * batch_size:(index+1) * batch_size]
-                                               })
-                                               
-        print("Training model.........")
-        # initialize loop variables for stopping and checking progress
-        patience = 5000                 # minimum number of examples to use
-        patience_increase = 2           # wait at least this long before updtating best
-        improvement_threshold = 0.995   # min significant improvement
-        validation_frequency = min(n_train_batches, patience)
-        best_validation_loss = np.inf
-        test_score = 0.
-        start_time = timeit.default_timer()
-        done_looping = False
-        epoch = 0
-    
-        # for each training loop
-        while ( epoch < n_epochs ) and ( not done_looping ):        
-            epoch = epoch + 1
-        
-            # for each mini batch in the full data set
-            for minibatch_index in range(n_train_batches):
-                
-                # train then move to next batch
-                minibatch_avg_cost = train_model(minibatch_index)
-                iter = (epoch - 1) * n_train_batches + minibatch_index
-                
-                # check progress
-                if (iter + 1) % validation_frequency == 0:
-                
-                    validation_losses = [validate_model(i) for i in range(n_valid_batches)]
-
-                    this_validation_loss = 1.0 - np.mean(validation_losses)
-                    print('epoch %i, minibatch %i/%i, current accuracy %f %%' % 
-                            (epoch, minibatch_index+1, n_train_batches, this_validation_loss*100.))
-                            
-                    if this_validation_loss < best_validation_loss:
-                        if this_validation_loss < best_validation_loss * improvement_threshold:
-                            patience = max(patience, iter * patience_increase)
-                        
-                        best_validation_loss = this_validation_loss
-                    
-                        test_losses = [test_model(i) for i in range(n_test_batches)]
-                        test_score = 1.0 - np.mean(test_losses)
-                    
-                        print(('     epoch %i, minibatch %i/%i, test error of best model %f %%') % 
-                                    (epoch, minibatch_index + 1, n_train_batches, test_score * 100.))
-                                
-                        with open('best_model.pkl', 'wb') as f:
-                            pickle.dump(classifier, f)
-            
-                if patience <= iter:
-                    done_looping = True
-                    break
-                
-        end_time = timeit.default_timer()    
-        print(('Optimization complete with best validation score of %f %%, with test performance %f %%') %
-                    (best_validation_loss * 100., test_score * 100.))
-                    
-        print(('The code ran for %d epochs, with %f epochs/sec' % 
-                    (epoch, 1. * epoch / (end_time - start_time))), file=sys.stderr)
-                    
   
     
     
@@ -365,15 +258,15 @@ def test_mlp():
     ##################################################            
     print("training ....")
     
-     # early-stopping parameters
+     # early-stopping parameters --- helps keep network from over training.
     patience = 10000                    # look as this many examples regardless
-    patience_increase = 2               # wait this much longer when a new best is found
+    patience_increase = 10               # wait this much longer when a new best is found
+                                        # increases improve training accuracy but not test or validation
     improvement_threshold = 0.995        # a relative improvement of this much is considered significant
     validation_frequency = min(n_train_batches, patience // 2)
                                   # go through this many
                                   # minibatche before checking the network
-                                  # on the validation set; in this case we
-                                  # check every epoch
+                                  # on the validation set; in this case we check every epoch
 
     best_validation_loss = np.inf
     best_iter = 0
@@ -390,8 +283,6 @@ def test_mlp():
         for minibatch_index in range(n_train_batches):
 
             minibatch_avg_cost = train_model(minibatch_index)
-    
-
             iter = (epoch - 1) * n_train_batches + minibatch_index
 
             if (iter + 1) % validation_frequency == 0:
@@ -434,5 +325,4 @@ def test_mlp():
 
 ##########################################################################################
 # run network
-#LogisticRegression.sgd_optimization_mnist()
 test_mlp()

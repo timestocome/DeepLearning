@@ -17,6 +17,13 @@ from theano.tensor.signal import downsample
 
 
 
+#########################################
+# to do 
+# save/load weights/biases using pickle
+# print parameters, scoring to text file
+# streamline code
+# adjust parameters
+# fill in comments
 
 
 
@@ -34,7 +41,7 @@ learning_rate = 0.1     # how fast does net converge - bounce out of local mins
                         # 0.01 ~ 90% accuracy, 0.1 ~ 92%. 1.0 drops accuracy to 75%, 0.5 ~ 94%
 L1_reg = 0.0000         # lambda - scaling factor for regularizations, slightly better accuracy
 L2_reg = 0.0001         #     with L2 than L1 
-n_epochs = 500          # max number of times we loop through full training set
+n_epochs = 50          # max number of times we loop through full training set
 batch_size = 500        # number of training examples per batch - smaller is slower but better accuracy( above 20)
 n_hidden = 100          # number of nodes in hidden layer increasing or decreasing from 100 slowly drops accuracy
 n_kerns = [20, 50]      # number of kernels per layer [ 1st layer, 2nd layer, ...]
@@ -317,7 +324,7 @@ def evaluate_lenet5():
     patience = 10000                # min number of examples to view
     patience_increase = 2           # wait this long before updating best
     improvement_threshold = 0.995   # min improvement to consider
-    validation_frequency = min(n_train_batches, patience // 2)  # how often to check validation set
+    validation_frequency = n_epochs // 10  # how often to check validation set
     best_validation_loss = np.inf
     best_iter = 0
     test_score = 0.
@@ -343,7 +350,7 @@ def evaluate_lenet5():
                 # compute zero one loss on validation set
                 validation_losses = [validate_model(i) for i in range(n_valid_batches)]
                 this_validation_loss = np.mean(validation_losses)
-                print('epoch %i, minibatch %i/%i, validation error %f %%' %(epoch, minibatch_index + 1, n_train_batches, this_validation_loss * 100.))
+                print('epoch %i, minibatch %i/%i, validation %f %%' %(epoch, minibatch_index + 1, n_train_batches, 100.0 - this_validation_loss * 100.))
                 
                 # if best score to date
                 if this_validation_loss < best_validation_loss:
@@ -358,7 +365,7 @@ def evaluate_lenet5():
                     # test on test set
                     test_losses = [test_model(i) for i in range(n_test_batches)]
                     test_score = np.mean(test_losses)
-                    print(('     epoch %i, minibatch %i/%i, test error of best model %f %%') % (epoch, minibatch_index + 1, n_train_batches, test_score * 100.))
+                    print(('     epoch %i, minibatch %i/%i, test score of best model %f %%') % (epoch, minibatch_index + 1, n_train_batches, 100.0 - test_score * 100.))
                     
                     
                 if patience <= iter:
@@ -369,9 +376,14 @@ def evaluate_lenet5():
     print("Optimization complete")
     print("Best validation score of %f %% obtained at iteration %i with test score of %f %%" %
                         (best_validation_loss * 100., best_iter + 1, test_score * 100.))
-    print(("The code for the file " + os.path.spliat(__file__)[1] + " ran for %.2fm" % ((end_time - start_time)/60.)), file=sys.stderr)
+    print(("The code for the file " + os.path.split(__file__)[1] + " ran for %.2fm" % ((end_time - start_time)/60.)), file=sys.stderr)
     
     
+    ######  print to text file as well ##############
+    run_file = open('LeNet5_lastRun.txt', 'w')
+    run_file.write("Best validation score of %f %% obtained at iteration %i with test score of %f %%" %
+                        (best_validation_loss * 100., best_iter + 1, test_score * 100.))
+    run_file.close()
     
 
 ############################################################################################

@@ -41,12 +41,14 @@ learning_rate = 0.1     # how fast does net converge - bounce out of local mins
                         # 0.01 ~ 90% accuracy, 0.1 ~ 92%. 1.0 drops accuracy to 75%, 0.5 ~ 94%
 L1_reg = 0.0000         # lambda - scaling factor for regularizations, slightly better accuracy
 L2_reg = 0.0001         #     with L2 than L1 
-n_epochs = 50          # max number of times we loop through full training set
-batch_size = 500        # number of training examples per batch - smaller is slower but better accuracy( above 20)
+n_epochs = 100          # max number of times we loop through full training set
+batch_size = 50        # number of training examples per batch - smaller is slower but better accuracy( above 20)
 n_hidden = 100          # number of nodes in hidden layer increasing or decreasing from 100 slowly drops accuracy
+
 n_kerns = [20, 50]      # number of kernels per layer [ 1st layer, 2nd layer, ...]
 
 rng = np.random.RandomState(42)     # seed for random
+validation_frequency = 10   # how often to check validation set
 #################################################################################################
 # load up data 
 # MNIST dataset, images are 28x28 images, 0.0-1.0 0 being blank, 1.0 darkest mark on image
@@ -82,6 +84,8 @@ def shared_dataset(data_xy, borrow=True):
 test_set_x, test_set_y = shared_dataset(test_set)
 valid_set_x, valid_set_y = shared_dataset(valid_set)
 train_set_x, train_set_y = shared_dataset(train_set)
+
+
 
 datasets = [(train_set_x, train_set_y), (valid_set_x, valid_set_y), (test_set_x, test_set_y)]
    
@@ -324,7 +328,7 @@ def evaluate_lenet5():
     patience = 10000                # min number of examples to view
     patience_increase = 2           # wait this long before updating best
     improvement_threshold = 0.995   # min improvement to consider
-    validation_frequency = n_epochs // 10  # how often to check validation set
+
     best_validation_loss = np.inf
     best_iter = 0
     test_score = 0.
@@ -341,7 +345,7 @@ def evaluate_lenet5():
             iter = (epoch - 1) * n_train_batches + minibatch_index
             
             if iter % 100 == 0:
-                print ('training iteration ', iter)
+                print ('_______________________training iteration______________________________ ', iter)
                 
             cost_ij = train_model(minibatch_index)
             
@@ -365,7 +369,7 @@ def evaluate_lenet5():
                     # test on test set
                     test_losses = [test_model(i) for i in range(n_test_batches)]
                     test_score = np.mean(test_losses)
-                    print(('     epoch %i, minibatch %i/%i, test score of best model %f %%') % (epoch, minibatch_index + 1, n_train_batches, 100.0 - test_score * 100.))
+                    print(('***** epoch %i, minibatch %i/%i, test score of best model %f %%') % (epoch, minibatch_index + 1, n_train_batches, 100.0 - test_score * 100.))
                     
                     
                 if patience <= iter:
@@ -375,7 +379,7 @@ def evaluate_lenet5():
     end_time = timeit.default_timer()
     print("Optimization complete")
     print("Best validation score of %f %% obtained at iteration %i with test score of %f %%" %
-                        (best_validation_loss * 100., best_iter + 1, test_score * 100.))
+                        (100.0 - best_validation_loss * 100., 100.0 - best_iter + 1, test_score * 100.))
     print(("The code for the file " + os.path.split(__file__)[1] + " ran for %.2fm" % ((end_time - start_time)/60.)), file=sys.stderr)
     
     
@@ -384,6 +388,9 @@ def evaluate_lenet5():
     run_file.write("Best validation score of %f %% obtained at iteration %i with test score of %f %%" %
                         (best_validation_loss * 100., best_iter + 1, test_score * 100.))
     run_file.close()
+    
+    #########  save weights, biases etc ? ###############################################
+    with open('lenet_best_model.pkl', 'wb') as f: pickle.dump(params, f)
     
 
 ############################################################################################

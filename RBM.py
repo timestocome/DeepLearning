@@ -9,12 +9,20 @@
 # http://deeplearning4j.org/restrictedboltzmannmachine.html
 
 
-"""This tutorial introduces restricted boltzmann machines (RBM) using Theano.
 
-Boltzmann Machines (BMs) are a particular form of energy-based model which
-contain hidden variables. Restricted Boltzmann Machines further restrict BMs
-to those without visible-visible and hidden-hidden connections.
-"""
+
+# Boltzmann Machines (BMs) are a particular form of energy-based model which
+# contain hidden variables. Restricted Boltzmann Machines further restrict BMs
+# to those without visible-visible and hidden-hidden connections.
+
+# RBM are Energy Based Models and we're trying to get the minimum energy 
+# Probability(x) = e^-E(x)/Sum(e^-E(x))
+# Loss function = -1/N * Sum(log(P(x)))
+# Gradient is the estimated Expectation value
+# Gradient not computationally feasible so we take a sample of input using MonteCarlo to get energy decrease
+# Markov Chains are used to calculate energy increase
+# E(v, h) = -b'v -c'h -hWv
+
 
 from __future__ import print_function
 
@@ -246,26 +254,24 @@ class RBM(object):
         # shared variables for this class
         self.params = [self.W, self.hbias, self.vbias]
         
-
+    # used to compute gradient
     def free_energy(self, v_sample):
 
-        wx_b = T.dot(v_sample, self.W) + self.hbias
-        vbias_term = T.dot(v_sample, self.vbias)
-        hidden_term = T.sum(T.log(1 + T.exp(wx_b)), axis=1)
+        wx_b = T.dot(v_sample, self.W) + self.hbias             # W * x + hb
+        vbias_term = T.dot(v_sample, self.vbias)                # v * vb
+        hidden_term = T.sum(T.log(1 + T.exp(wx_b)), axis=1)     # Sum
         
-        return -hidden_term - vbias_term
+        return -hidden_term - vbias_term                            
+
 
     # propagate visible unit activations to hidden units
     def propup(self, vis):
     
-        # Note that we return also the pre-sigmoid activation of the
-        # layer. As it will turn out later, due to how Theano deals with
-        # optimizations, this symbolic variable will be needed to write
-        # down a more stable computational graph (see details in the
-        # reconstruction cost function)
+        # Note that we return also the pre-sigmoid activation of the layer. 
         pre_sigmoid_activation = T.dot(vis, self.W) + self.hbias
         
         return [pre_sigmoid_activation, T.nnet.sigmoid(pre_sigmoid_activation)]
+
 
     # compute hidden unit activations given a sample of visibles
     def sample_h_given_v(self, v0_sample):
@@ -278,6 +284,7 @@ class RBM(object):
         return [pre_sigmoid_h1, h1_mean, h1_sample]
         
         
+        
     # propagate hidden units activation to visible units
     def propdown(self, hid):
         
@@ -285,6 +292,7 @@ class RBM(object):
         pre_sigmoid_activation = T.dot(hid, self.W.T) + self.vbias
         
         return [pre_sigmoid_activation, T.nnet.sigmoid(pre_sigmoid_activation)]
+
 
 
     # compute the activation of the visible given the hidden sample
@@ -316,18 +324,16 @@ class RBM(object):
         return [pre_sigmoid_h1, h1_mean, h1_sample, pre_sigmoid_v1, v1_mean, v1_sample]
 
 
-    # one step of CD-k or PCD-k
+    # one step of Contrastive Divergence or Persistent Contrastive Divergence
+    # Contrastive re-inits chain for each input image, 
+    # CD does not wait for chain to converge 
+    # Persistent just updates the chain 
     def get_cost_updates(self, lr=0.1, persistent=None, k=1):
         
         # persistent: None for CD. For PCD, 
         # k: number of Gibbs steps to do in CD-k/PCD-k
 
-        # Returns a proxy for the cost and the updates dictionary. The
-        # dictionary contains the update rules for weights and biases but
-        # also an update of the shared variable used to store the persistent
-        # chain, if one is used.
-
-       
+        
         # compute positive phase
         pre_sigmoid_ph, ph_mean, ph_sample = self.sample_h_given_v(self.input)
 
@@ -424,30 +430,12 @@ class RBM(object):
     def get_reconstruction_cost(self, updates, pre_sigmoid_nv):
         
         # Note that this function requires the pre-sigmoid activation as
-        # input.  To understand why this is so you need to understand a
-        # bit about how Theano works. Whenever you compile a Theano
-        # function, the computational graph that you pass as input gets
-        # optimized for speed and stability.  This is done by changing
-        # several parts of the subgraphs with others.  One such
-        # optimization expresses terms of the form log(sigmoid(x)) in
-        # terms of softplus.  We need this optimization for the
+        # input. We need this optimization for the
         # cross-entropy since sigmoid of numbers larger than 30. (or
         # even less then that) turn to 1. and numbers smaller than
         # -30. turn to 0 which in terms will force theano to compute
         # log(0) and therefore we will get either -inf or NaN as
-        # cost. If the value is expressed in terms of softplus we do not
-        # get this undesirable behaviour. This optimization usually
-        # works fine, but here we have a special case. The sigmoid is
-        # applied inside the scan op, while the log is
-        # outside. Therefore Theano will only see log(scan(..)) instead
-        # of log(sigmoid(..)) and will not apply the wanted
-        # optimization. We can not go and replace the sigmoid in scan
-        # with something else also, because this only needs to be done
-        # on the last step. Therefore the easiest and more efficient way
-        # is to get also the pre-sigmoid activation as an output of
-        # scan, and apply both the log and sigmoid outside scan such
-        # that Theano can catch and optimize the expression.
-
+        # cost.
 
         cross_entropy = T.mean(
             T.sum(
@@ -456,17 +444,14 @@ class RBM(object):
 
         return cross_entropy
 
-
+##############################################################################################
 # Train and test 
-def test_rbm(learning_rate=0.1, training_epochs=15,
-             dataset='mnist.pkl.gz', batch_size=20,
-             n_chains=20, n_samples=10, output_folder='rbm_plots',
-             n_hidden=500):
+#############################################################################################
+def test_rbm(learning_rate=0.1, training_epochs=25, dataset='mnist.pkl.gz', batch_size=20,
+             n_chains=20, n_samples=10, output_folder='rbm_plots', n_hidden=500):
     
     # n_chains: number of parallel Gibbs chains to be used for sampling
     # n_samples: number of samples to plot for each chain
-
-    
 
     train_set_x, train_set_y = datasets[0]
     test_set_x, test_set_y = datasets[2]
@@ -479,7 +464,8 @@ def test_rbm(learning_rate=0.1, training_epochs=15,
     index = T.lscalar()       # index to a [mini]batch
     x = T.matrix('x')         # the data is presented as rasterized images
 
-    rng = np.random.RandomState(123)
+    # init random numbers
+    rng = np.random.RandomState(27)
     theano_rng = RandomStreams(rng.randint(2 ** 30))
 
     # initialize storage for the persistent chain (state = hidden layer of chain)
@@ -495,6 +481,7 @@ def test_rbm(learning_rate=0.1, training_epochs=15,
     #################################
     #     Training the RBM          #
     #################################
+    # out of images
     if not os.path.isdir(output_folder):
         os.makedirs(output_folder)
     os.chdir(output_folder)
@@ -510,6 +497,7 @@ def test_rbm(learning_rate=0.1, training_epochs=15,
     plotting_time = 0.
     start_time = timeit.default_timer()
 
+    # one loop through data set in each epoch
     for epoch in range(training_epochs):
 
         # go through the training set
@@ -538,7 +526,6 @@ def test_rbm(learning_rate=0.1, training_epochs=15,
     end_time = timeit.default_timer()
 
     pretraining_time = (end_time - start_time) - plotting_time
-
     print ('Training took %f minutes' % (pretraining_time / 60.))
     
 

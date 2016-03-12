@@ -16,17 +16,26 @@ I'm also trying to keep each example net self contained instead of broken into s
 Completed:
 
 Logistic Regression
+
 Multilayer Perceptron
+
 Convolutional ( LeNet )
+
 Denoising Autoencoders
+
 Stacekd Denoising Autoencoders
+
 Restricted Boltzmann Machine
+
 Deep Belief Network
 
 
 To do:
 
 Hybrid Monte-Carlo Sampling
+
 Recurrent Neural Networks
+
 LSTM Network
+
 ? maybe RNN-RBM

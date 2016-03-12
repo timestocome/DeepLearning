@@ -32,10 +32,4 @@ Deep Belief Network
 Hybrid Monte-Carlo Sampling
 
 
-
-To do:
-
-Recurrent Neural Networks
-
-LSTM Network
-
+Stopping here, I need some projects of my own to put these to use. 

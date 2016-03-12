@@ -29,13 +29,13 @@ Restricted Boltzmann Machine
 
 Deep Belief Network
 
+Hybrid Monte-Carlo Sampling
+
+
 
 To do:
-
-Hybrid Monte-Carlo Sampling
 
 Recurrent Neural Networks
 
 LSTM Network
 
-? maybe RNN-RBM

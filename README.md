@@ -31,5 +31,7 @@ Deep Belief Network
 
 Hybrid Monte-Carlo Sampling
 
+Elman-Recurrent (Python 2.x-3.x and replaced PERL script with slow but working Python)
+
 
 Stopping here, I need some projects of my own to put these to use. 

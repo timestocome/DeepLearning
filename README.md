@@ -35,6 +35,8 @@ Elman-Recurrent (Python 2.x-3.x and replaced PERL script with slow but working P
 
 
 Not yet here:
+
 LSTM for Sentiment Analysis
+
 RNN-RBM to model and sequence music
 

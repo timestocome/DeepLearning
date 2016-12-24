@@ -12,12 +12,15 @@ My code is in Python 3, book and sample code is Python 2. Not sure which version
 
 I'm also trying to keep each example net self contained instead of broken into separate files like book examples. This is so I can easily drop a network with only the parts I need into a new project. Once that's done it'll be easy to put the various classes back into separate files.
 
+*doing a quick brush up on Theano and updating some of these examples with cleaner code
 
 Completed:
 
 Logistic Regression
 
 Multilayer Perceptron
+
+Basic Convolutional Network to filter images
 
 Convolutional ( LeNet )
 

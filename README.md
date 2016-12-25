@@ -16,13 +16,13 @@ I'm also trying to keep each example net self contained instead of broken into s
 
 Completed:
 
-Logistic Regression
+Logistic Regression ( updated )
 
-Multilayer Perceptron
+Multilayer Perceptron ( updated )
 
-Basic Convolutional Network to filter images
+Basic Convolutional Network to filter images ( updated )
 
-Convolutional ( LeNet )
+Convolutional ( LeNet ) ( updated, hoping to add QLearning to this to make a deep reinforcement net ) 
 
 Denoising Autoencoders
 

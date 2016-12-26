@@ -1,6 +1,10 @@
+# http://github.com/timestocome
+
+# adapted from https://github.com/lisa-lab/DeepLearningTutorials
 
 import pickle
 import gzip
+
 
 import numpy as np
 

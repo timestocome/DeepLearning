@@ -1,5 +1,7 @@
 # http://github.com/timestocome
 
+# adapted from https://github.com/lisa-lab/DeepLearningTutorials
+
 import numpy as np
 
 import theano

@@ -24,7 +24,7 @@ Basic Convolutional Network to filter images ( updated )
 
 Convolutional ( LeNet ) ( updated, hoping to add QLearning to this to make a deep reinforcement net ) 
 
-Denoising Autoencoders
+Denoising Autoencoders ( updated )
 
 Stacked Denoising Autoencoders
 

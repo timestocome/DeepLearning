@@ -28,7 +28,7 @@ Denoising Autoencoders ( updated )
 
 Stacked Denoising Autoencoders ( minor changes and testing )
 
-Restricted Boltzmann Machine
+Restricted Boltzmann Machine ( no changes )
 
 Deep Belief Network
 

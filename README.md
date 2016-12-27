@@ -26,7 +26,7 @@ LeNet5  ( updated, hoping to add QLearning to this to make a deep reinforcement 
 
 Denoising Autoencoders ( updated )
 
-Stacked Denoising Autoencoders
+Stacked Denoising Autoencoders ( minor changes and testing )
 
 Restricted Boltzmann Machine
 

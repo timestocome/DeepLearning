@@ -1,4 +1,3 @@
-#!/python
 
 # adapted from original source code
 # http://deeplearning.net/tutorial/
@@ -396,7 +395,7 @@ class SdA(object):
 
 
 #     Demonstrates how to train and test a stochastic denoising autoencoder. This is demonstrated on MNIST.
-def test_SdA(finetune_lr=0.1, pretraining_epochs=15, pretrain_lr=0.001, training_epochs=1000, dataset='mnist.pkl.gz', batch_size=1):
+def test_SdA(finetune_lr=0.1, pretraining_epochs=15, pretrain_lr=0.001, training_epochs=10, dataset='mnist.pkl.gz', batch_size=1):
 
     n_train_batches = train_set_x.get_value(borrow=True).shape[0] // batch_size
    
@@ -404,7 +403,7 @@ def test_SdA(finetune_lr=0.1, pretraining_epochs=15, pretrain_lr=0.001, training
     print ('... building the model')
     
     # construct the stacked denoising autoencoder class
-    sda = SdA(numpy_rng=numpy_rng, n_ins=28 * 28, hidden_layers_sizes=[1000, 1000, 1000], n_outs=10)
+    sda = SdA(numpy_rng=numpy_rng, n_ins=28 * 28, hidden_layers_sizes=[500, 500], n_outs=10)
 
 
     #########################
@@ -454,7 +453,7 @@ def test_SdA(finetune_lr=0.1, pretraining_epochs=15, pretrain_lr=0.001, training
     validation_frequency = min(n_train_batches, patience // 2)
                                   
 
-    best_validation_loss = numpy.inf
+    best_validation_loss = np.inf
     test_score = 0.
     start_time = timeit.default_timer()
 
@@ -469,7 +468,7 @@ def test_SdA(finetune_lr=0.1, pretraining_epochs=15, pretrain_lr=0.001, training
 
             if (iter + 1) % validation_frequency == 0:
                 validation_losses = validate_model()
-                this_validation_loss = numpy.mean(validation_losses)
+                this_validation_loss = np.mean(validation_losses)
                 print('epoch %i, minibatch %i/%i, validation error %f %%' %
                       (epoch, minibatch_index + 1, n_train_batches, this_validation_loss * 100.))
 
@@ -489,7 +488,7 @@ def test_SdA(finetune_lr=0.1, pretraining_epochs=15, pretrain_lr=0.001, training
 
                     # test it on the test set
                     test_losses = test_model()
-                    test_score = numpy.mean(test_losses)
+                    test_score = np.mean(test_losses)
                     print(('     epoch %i, minibatch %i/%i, test error of best model %f %%') %
                           (epoch, minibatch_index + 1, n_train_batches, test_score * 100.))
 

@@ -30,7 +30,7 @@ Stacked Denoising Autoencoders ( minor changes and testing )
 
 Restricted Boltzmann Machine ( no changes )
 
-Deep Belief Network
+Deep Belief Network ( very minor changes )
 
 Hybrid Monte-Carlo Sampling
 

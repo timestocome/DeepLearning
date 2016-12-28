@@ -14,7 +14,7 @@ I'm also trying to keep each example net self contained instead of broken into s
 
 *doing a quick brush up on Theano and updating some of these examples with cleaner code
 
-Completed:
+<b>Completed:</b>
 
 Logistic Regression ( updated )
 
@@ -37,13 +37,13 @@ Hybrid Monte-Carlo Sampling
 Elman-Recurrent (Python 2.x-3.x and replaced PERL script with slow but working Python)
 
 
-Not yet here:
+<b>Not yet here:</b>
 
 LSTM for Sentiment Analysis
 
 RNN-RBM to model and sequence music
 
-Not in the book:
+<b>Not in the book:</b>
 
 Deep Reinforcement Learning
 

@@ -43,3 +43,8 @@ LSTM for Sentiment Analysis
 
 RNN-RBM to model and sequence music
 
+Not in the book:
+
+Deep Reinforcement Learning
+
+

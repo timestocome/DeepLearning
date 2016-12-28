@@ -1,5 +1,3 @@
-#!/python
-
 
 
 # adapted from original source code
@@ -95,12 +93,11 @@ class HiddenLayer(object):
             if activation == theano.tensor.nnet.sigmoid:
                 W_values *= 4.
             W = theano.shared(value = W_values, name = 'W', borrow = True)
-            
+        self.W = W
+
         if b is None:
             b_values = np.zeros((n_out,), dtype=theano.config.floatX)
             b = theano.shared(value = b_values, name = 'b', borrow = True)
-        
-        self.W = W
         self.b = b
         
         # calculate linear output using dot product + b, else use tanh or sigmoid
@@ -178,28 +175,29 @@ class RBM(object):
                 
             # for gpu processing
             W = theano.shared(value=initial_W, name='W', borrow=True)
+        self.W = W
 
         # create shared variable for hidden units bias
         if hbias is None:
             hbias = theano.shared(value=np.zeros(n_hidden, dtype = theano.config.floatX), name = 'hbias', borrow = True)
-        
+        self.hbias = hbias
+
         # create visible bias shared variable
         if vbias is None:
             vbias = theano.shared( value = np.zeros( n_visible, dtype = theano.config.floatX ), name='vbias', borrow=True )
+        self.vbias = vbias
 
         # initialize input layer for standalone RBM or layer0 of DBN
         self.input = input
         if not input:
             self.input = T.matrix('input')
 
-        self.W = W
-        self.hbias = hbias
-        self.vbias = vbias
         self.theano_rng = theano_rng
         
-        # shared variables for this class
+        # values we'll adjust with cost function and gradients
         self.params = [self.W, self.hbias, self.vbias]
         
+
     # used to compute gradient
     def free_energy(self, v_sample):
 
@@ -213,18 +211,15 @@ class RBM(object):
     # propagate visible unit activations to hidden units
     def propup(self, vis):
     
-        # Note that we return also the pre-sigmoid activation of the layer. 
         pre_sigmoid_activation = T.dot(vis, self.W) + self.hbias
         
         return [pre_sigmoid_activation, T.nnet.sigmoid(pre_sigmoid_activation)]
 
 
-    # compute hidden unit activations given a sample of visibles
+    # select a random sample of hidden activations
     def sample_h_given_v(self, v0_sample):
         
         pre_sigmoid_h1, h1_mean = self.propup(v0_sample)
-        
-        # for the GPU we need to specify to return the dtype floatX
         h1_sample = self.theano_rng.binomial(size=h1_mean.shape, n=1, p=h1_mean, dtype=theano.config.floatX)
                                              
         return [pre_sigmoid_h1, h1_mean, h1_sample]
@@ -234,14 +229,13 @@ class RBM(object):
     # propagate hidden units activation to visible units
     def propdown(self, hid):
         
-        # Note that we return also the pre_sigmoid_activation of the layer.
         pre_sigmoid_activation = T.dot(hid, self.W.T) + self.vbias
         
         return [pre_sigmoid_activation, T.nnet.sigmoid(pre_sigmoid_activation)]
 
 
 
-    # compute the activation of the visible given the hidden sample
+    # select a sample of hidden unit activations to visiible
     def sample_v_given_h(self, h0_sample):
 
         pre_sigmoid_v1, v1_mean = self.propdown(h0_sample)
@@ -252,7 +246,7 @@ class RBM(object):
         return [pre_sigmoid_v1, v1_mean, v1_sample]
 
 
-    # gibbs sampling from hidden state
+    # gibbs sampling hidden units - MC type chain of probability sampling
     def gibbs_hvh(self, h0_sample):
        
         pre_sigmoid_v1, v1_mean, v1_sample = self.sample_v_given_h(h0_sample)
@@ -271,9 +265,8 @@ class RBM(object):
 
 
     # one step of Contrastive Divergence or Persistent Contrastive Divergence
-    # Contrastive re-inits chain for each input image, 
-    # CD does not wait for chain to converge 
-    # Persistent just updates the chain 
+    # used to train undirected networks
+    # approximated gradient using a short markov chain ( gibbs sample )
     def get_cost_updates(self, lr=0.1, persistent=None, k=1):
         
         # persistent: None for CD. For PCD, 
@@ -283,7 +276,7 @@ class RBM(object):
         # compute positive phase
         pre_sigmoid_ph, ph_mean, ph_sample = self.sample_h_given_v(self.input)
 
-        # decide how to initialize persistent chain:
+
         # for CD, we use the newly generate hidden sample
         # for PCD, we initialize from the old state of the chain
         if persistent is None:
@@ -333,7 +326,6 @@ class RBM(object):
         
         # constructs the update dictionary
         for gparam, param in zip(gparams, self.params):
-            # make sure that the learning rate is of the right dtype
             updates[param] = param - gparam * T.cast( lr, dtype=theano.config.floatX )
             
             
@@ -413,7 +405,6 @@ class DBN(object):
 
     def __init__(self, numpy_rng, theano_rng=None, n_ins=784, hidden_layers_sizes=[500, 500], n_outs=10):
         """This class is made to support a variable number of layers.
-
         n_ins: dimension of the input to the DBN
         hidden_layers_sizes: intermediate layers size, must contain at least one value
         n_outs: dimension of the output of the network
@@ -510,7 +501,6 @@ class DBN(object):
     def pretraining_functions(self, train_set_x, batch_size, k):
         '''Generates a list of functions for performing one step of
         gradient descent at a given layer.
-
         :param train_set_x: Shared var. that contains all datapoints used for training the RBM
         :param batch_size: size of a [mini]batch
         :param k: number of Gibbs steps to do in CD-k / PCD-k
@@ -610,12 +600,10 @@ class DBN(object):
         return train_fn, valid_score, test_score
 
 # pretraining = 100 training_epochs = 1000 put it at 10 for testing
-def test_DBN(finetune_lr=0.1, pretraining_epochs=100, pretrain_lr=0.01, k=1, training_epochs=1000, dataset='mnist.pkl.gz', batch_size=10):
+def test_DBN(finetune_lr=0.1, pretraining_epochs=25, pretrain_lr=0.01, k=1, training_epochs=25, dataset='mnist.pkl.gz', batch_size=20):
     """
     Demonstrates how to train and test a Deep Belief Network.
-
     This is demonstrated on MNIST.
-
     finetune_lr: learning rate used in the finetune stage
     pretraining_epochs: number of epoch to do pretraining
     pretrain_lr: learning rate to be used during pre-training
@@ -641,7 +629,7 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=100, pretrain_lr=0.01, k=1, tra
 
     
     #########################
-    # PRETRAINING THE MODEL #
+    # PRETRAINING THE MODEL # trains all the layers
     #########################
     print ('... getting the pretraining functions')
     pretraining_fns = dbn.pretraining_functions(train_set_x=train_set_x, batch_size=batch_size, k=k)
@@ -714,7 +702,7 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=100, pretrain_lr=0.01, k=1, tra
                     # test it on the test set
                     test_losses = test_model()
                     test_score = np.mean(test_losses)
-                    print(('     epoch %i, minibatch %i/%i, test error of best model %f %%') %
+                    print(('     epoch %i, minibatch %i/%i, test score of best model %f %%') %
                           (epoch, minibatch_index + 1, n_train_batches, 100.0 - test_score * 100.))
 
             if patience <= iter:

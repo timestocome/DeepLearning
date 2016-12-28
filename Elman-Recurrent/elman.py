@@ -5,6 +5,7 @@ import os
 from theano import tensor as T
 from collections import OrderedDict
 
+# Elman recurrent network
 
 
 class model(object):
@@ -46,17 +47,19 @@ class model(object):
         x = self.emb[idxs].reshape((idxs.shape[0], de*cs))
         y    = T.iscalar('y') # label - target
 
-        # ? input * input weights + hidden  * hidden weights
+        # input * input weights + previous hidden * hidden weights + bias
+        # then softmax so we have output probabilities
         def recurrence(x_t, h_tm1):
             h_t = T.nnet.sigmoid(T.dot(x_t, self.Wx) + T.dot(h_tm1, self.Wh) + self.bh)
             s_t = T.nnet.softmax(T.dot(h_t, self.W) + self.b)
             return [h_t, s_t]
         
-        # hidden, output
+        # loop over input matrix processing it through recurrence equations
         [h, s], _ = theano.scan(fn=recurrence, \
             sequences=x, outputs_info=[self.h0, None], \
             n_steps=x.shape[0])
 
+        # tag end of sentence
         p_y_given_x_lastword = s[-1,0,:]
         p_y_given_x_sentence = s[:,0,:]
         y_pred = T.argmax(p_y_given_x_sentence, axis=1)

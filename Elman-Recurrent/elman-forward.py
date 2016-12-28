@@ -7,15 +7,14 @@ import random
 
 import load
 from elman import model
-from accuracy import conlleval
 from tools import shuffle, minibatch, contextwin
 
 
 
-# convolutional example in Theano,
+# recurrent net with memory
 # started with code from Deep Learning,
 # converted it from Python 2.x to 3.x
-# removed PERL script and hacked in inefficient but working accuracy calcualtion in its place
+# removed PERL script and hacked in inefficient but working accuracy calculation in its place
 
 
 if __name__ == '__main__':
@@ -29,7 +28,7 @@ if __name__ == '__main__':
          'nhidden':100,                 # number of hidden units try 100->200
          'seed':345,
          'emb_dimension':100,           # dimension of word embedding try 50->100
-         'nepochs':50}
+         'nepochs':1}
 
     folder = os.path.basename(__file__).split('.')[0]
     if not os.path.exists(folder): os.mkdir(folder)
@@ -47,7 +46,7 @@ if __name__ == '__main__':
     nclasses = len(dic['labels2idx'])
     nsentences = len(train_lex)
 
-    # instanciate the model
+    # describe model
     numpy.random.seed(s['seed'])
     random.seed(s['seed'])
     rnn = model(    nh = s['nhidden'],
@@ -62,7 +61,7 @@ if __name__ == '__main__':
     s['clr'] = s['lr']
     for e in range(s['nepochs']):
     
-        # shuffle
+        # shuffle training data
         shuffle([train_lex, train_ne, train_y], s['seed'])
         s['ce'] = e
         tic = time.time()
@@ -78,22 +77,11 @@ if __name__ == '__main__':
                 rnn.train(word_batch, label_last_word, s['clr'])
                 rnn.normalize()
                 
-            if s['verbose']:
-                print ('[learning] epoch %i >> %2.2f%%'%(e,(i+1)*100./nsentences),'completed in %.2f (sec) <<\r'%(time.time()-tic),
-                sys.stdout.flush())
+            print ('training epoch %i > %2.2f%%' % (e,(i+1)*100./nsentences))
+            sys.stdout.flush()
 
-        # evaluation // back into the real world : idx -> words
-        predictions_test = [ map(lambda x: idx2label[x], \
-                             rnn.classify(numpy.asarray(contextwin(x, s['win'])).astype('int32')))\
-                             for x in test_lex ]
-        groundtruth_test = [ map(lambda x: idx2label[x], y) for y in test_y ]
-        words_test = [ map(lambda x: idx2word[x], w) for w in test_lex]
+       
 
-        predictions_valid = [ map(lambda x: idx2label[x], \
-                             rnn.classify(numpy.asarray(contextwin(x, s['win'])).astype('int32')))\
-                             for x in valid_lex ]
-        groundtruth_valid = [ map(lambda x: idx2label[x], y) for y in valid_y ]
-        words_valid = [ map(lambda x: idx2word[x], w) for w in valid_lex]
         
         # evaluation
         # test_y, valid_y, train_y contain correct labels
@@ -109,7 +97,6 @@ if __name__ == '__main__':
                 a = a[0:len(b)]
        
             correct = sum(a == b)
-            print (correct)
             running_average += correct/len(a)
             count += 1
         print ("Average correct", running_average/len(valid_lex))
@@ -118,5 +105,9 @@ if __name__ == '__main__':
         if s['decay'] and abs(s['be']-s['ce']) >= 10: s['clr'] *= 0.5
         if s['clr'] < 1e-5: break
 
-    print ('BEST RESULT: epoch', e, 'valid F1', s['vf1'], 'best test F1', s['tf1'], 'with the model', folder)
 
+        # info to user
+        #test_output_words = [idx2label for z in a]
+        #print("test_output", test_output_words)
+
+        

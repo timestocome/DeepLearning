@@ -1,4 +1,4 @@
-#!/python
+# http://github.com/timestocome
 
 
 # adapted from original source code
@@ -8,12 +8,21 @@
 # http://www.cs.toronto.edu/~hinton/absps/guideTR.pdf
 # http://deeplearning4j.org/restrictedboltzmannmachine.html
 
-
+# simple python only example of RBM
+# see https://github.com/echen/restricted-boltzmann-machines/blob/master/rbm.py
 
 
 # Boltzmann Machines (BMs) are a particular form of energy-based model which
 # contain hidden variables. Restricted Boltzmann Machines further restrict BMs
 # to those without visible-visible and hidden-hidden connections.
+
+# RMBs are used for classification, regression and dimension reduction
+# we have a visible layer and a hidden layer
+
+# image reconstruction is done by passing the activation of the hidden nodes as input to the hidden
+#   layer, then multiplying that by the weights, added a bias which gives the value for each pixel
+
+# positive weights between units means they turn on/off together, negative units prefer different states
 
 # RBM are Energy Based Models and we're trying to get the minimum energy 
 # Probability(x) = e^-E(x)/Sum(e^-E(x))
@@ -24,17 +33,12 @@
 # E(v, h) = -b'v -c'h -hWv
 
 
-from __future__ import print_function
+
 
 import timeit
 import gzip, pickle
 
-
-try:
-    import PIL.Image as Image
-except ImportError:
-    import Image
-
+import PIL.Image as Image
 
 import numpy as np
 
@@ -47,19 +51,18 @@ from theano.tensor.shared_randomstreams import RandomStreams
 
 
 
-
-
+# setup theano
 GPU = True
 if GPU:
-    print ("Trying to run under a GPU. ")
+    print("Device set to GPU")
     try: theano.config.device = 'gpu'
-    except: pass # it's already set
+    except: pass    # its already set
     theano.config.floatX = 'float32'
 else:
-    print ("Running with a CPU. ")
-     
-     
-     
+    print("Running with CPU")
+
+
+   
      
 #####################################################################################
 # load data 
@@ -210,10 +213,10 @@ class RBM(object):
     def __init__(self, input=None, n_visible=784, n_hidden=500, W=None, hbias=None, vbias=None, numpy_rng=None, theano_rng=None):
         
 
-        self.n_visible = n_visible
-        self.n_hidden = n_hidden
+        self.n_visible = n_visible      # size of input images
+        self.n_hidden = n_hidden        # number of hidden nodes
 
-        # init random number generator
+        # init random number generators
         if numpy_rng is None:
             numpy_rng = np.random.RandomState(42)
 
@@ -228,38 +231,38 @@ class RBM(object):
                     low = -4 * np.sqrt(6. / (n_hidden + n_visible)),
                     high = 4 * np.sqrt(6. / (n_hidden + n_visible)),
                     size = (n_visible, n_hidden)
-                ), dtype=theano.config.floatX )
-                
-            # for gpu processing
-            W = theano.shared(value=initial_W, name='W', borrow=True)
+                ), dtype=theano.config.floatX )            
+        W = theano.shared(value=initial_W, name='W', borrow=True)
+        self.W = W
 
         # create shared variable for hidden units bias
         if hbias is None:
             hbias = theano.shared(value=np.zeros(n_hidden, dtype = theano.config.floatX), name = 'hbias', borrow = True)
-        
+        self.hbias = hbias
+
         # create visible bias shared variable
         if vbias is None:
             vbias = theano.shared( value = np.zeros( n_visible, dtype = theano.config.floatX ), name='vbias', borrow=True )
+        self.vbias = vbias
 
         # initialize input layer for standalone RBM or layer0 of DBN
         self.input = input
         if not input:
             self.input = T.matrix('input')
 
-        self.W = W
-        self.hbias = hbias
-        self.vbias = vbias
+        # random number stream
         self.theano_rng = theano_rng
         
-        # shared variables for this class
+        # values we'll adjust with gradients
         self.params = [self.W, self.hbias, self.vbias]
         
-    # used to compute gradient
+
+    # used to calculate the cost for gradient
     def free_energy(self, v_sample):
 
         wx_b = T.dot(v_sample, self.W) + self.hbias             # W * x + hb
         vbias_term = T.dot(v_sample, self.vbias)                # v * vb
-        hidden_term = T.sum(T.log(1 + T.exp(wx_b)), axis=1)     # Sum
+        hidden_term = T.sum(T.log(1 + T.exp(wx_b)), axis=1)     # Sum( Log ( 1 + e^(W * x + hb)))
         
         return -hidden_term - vbias_term                            
 
@@ -267,8 +270,7 @@ class RBM(object):
     # propagate visible unit activations to hidden units
     def propup(self, vis):
     
-        # Note that we return also the pre-sigmoid activation of the layer. 
-        pre_sigmoid_activation = T.dot(vis, self.W) + self.hbias
+        pre_sigmoid_activation = T.dot(vis, self.W) + self.hbias     # x * W + hidden_bias
         
         return [pre_sigmoid_activation, T.nnet.sigmoid(pre_sigmoid_activation)]
 
@@ -279,6 +281,8 @@ class RBM(object):
         pre_sigmoid_h1, h1_mean = self.propup(v0_sample)
         
         # for the GPU we need to specify to return the dtype floatX
+        # provides random 1,0, as mask 
+        # we're getting a mask in the shape of the hidden layer so we can grab some samples from it
         h1_sample = self.theano_rng.binomial(size=h1_mean.shape, n=1, p=h1_mean, dtype=theano.config.floatX)
                                              
         return [pre_sigmoid_h1, h1_mean, h1_sample]
@@ -286,9 +290,9 @@ class RBM(object):
         
         
     # propagate hidden units activation to visible units
+    # this is the reconstruction
     def propdown(self, hid):
-        
-        # Note that we return also the pre_sigmoid_activation of the layer.
+
         pre_sigmoid_activation = T.dot(hid, self.W.T) + self.vbias
         
         return [pre_sigmoid_activation, T.nnet.sigmoid(pre_sigmoid_activation)]
@@ -300,7 +304,6 @@ class RBM(object):
 
         pre_sigmoid_v1, v1_mean = self.propdown(h0_sample)
         
-        # for the GPU we need to specify to return the dtype floatX
         v1_sample = self.theano_rng.binomial(size=v1_mean.shape, n=1, p=v1_mean, dtype=theano.config.floatX)
         
         return [pre_sigmoid_v1, v1_mean, v1_sample]
@@ -315,7 +318,7 @@ class RBM(object):
         return [pre_sigmoid_v1, v1_mean, v1_sample,  pre_sigmoid_h1, h1_mean, h1_sample]
 
 
-    # gibbs sampling starting from visible units
+    # gibbs sampling from visible units
     def gibbs_vhv(self, v0_sample):
      
         pre_sigmoid_h1, h1_mean, h1_sample = self.sample_h_given_v(v0_sample)
@@ -330,14 +333,10 @@ class RBM(object):
     # Persistent just updates the chain 
     def get_cost_updates(self, lr=0.1, persistent=None, k=1):
         
-        # persistent: None for CD. For PCD, 
-        # k: number of Gibbs steps to do in CD-k/PCD-k
-
-        
-        # compute positive phase
+        # compute positive phase ( visible to hidden )
         pre_sigmoid_ph, ph_mean, ph_sample = self.sample_h_given_v(self.input)
 
-        # decide how to initialize persistent chain:
+        # initialize persistent chain:
         # for CD, we use the newly generate hidden sample
         # for PCD, we initialize from the old state of the chain
         if persistent is None:
@@ -346,7 +345,7 @@ class RBM(object):
             chain_start = persistent
 
 
-        # perform actual negative phase
+        # perform actual negative phase ( hidden to visible units )
         # in order to implement CD-k/PCD-k we need to scan over the
         # function that implements one gibbs step k times.
         # Read Theano tutorial on scan for more information :
@@ -380,7 +379,7 @@ class RBM(object):
         gparams = T.grad(cost, self.params, consider_constant=[chain_end])
         
         
-        # constructs the update dictionary
+        # adjust the weights using the gradient
         for gparam, param in zip(gparams, self.params):
             # make sure that the learning rate is of the right dtype
             updates[param] = param - gparam * T.cast( lr, dtype=theano.config.floatX )
@@ -401,7 +400,7 @@ class RBM(object):
     # Stochastic approximation to the pseudo-likelihood
     def get_pseudo_likelihood_cost(self, updates):
         
-        # index of bit i in expression p(x_i | x_{\i})
+        # index of pixel i in expression p(x_i | x_{\i})
         bit_i_idx = theano.shared(value=0, name='bit_i_idx')
 
         # binarize the input image by rounding to nearest integer
@@ -481,23 +480,21 @@ def test_rbm(learning_rate=0.1, training_epochs=25, dataset='mnist.pkl.gz', batc
     #################################
     #     Training the RBM          #
     #################################
-    # out of images
+    # create a directory if needed for storing the images
     if not os.path.isdir(output_folder):
         os.makedirs(output_folder)
     os.chdir(output_folder)
 
 
-    # it is ok for a theano function to have no output
     # the purpose of train_rbm is solely to update the RBM parameters
     train_rbm = theano.function( [index], cost, updates=updates,
-        givens={
-            x: train_set_x[index * batch_size: (index + 1) * batch_size]
+        givens={ x: train_set_x[index * batch_size: (index + 1) * batch_size]
         }, name='train_rbm' )
 
     plotting_time = 0.
     start_time = timeit.default_timer()
 
-    # one loop through data set in each epoch
+    # each epoch loops entire training set
     for epoch in range(training_epochs):
 
         # go through the training set
@@ -510,7 +507,7 @@ def test_rbm(learning_rate=0.1, training_epochs=25, dataset='mnist.pkl.gz', batc
         # Plot filters after each training epoch
         plotting_start = timeit.default_timer()
         
-        # Construct image from the weight matrix
+        # Construct image from the hidden units activations
         image = Image.fromarray(
             tile_raster_images(
                 X=rbm.W.get_value(borrow=True).T,

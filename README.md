@@ -40,7 +40,7 @@ Elman-Recurrent (Python 2.x-3.x and replaced PERL script with slow but working P
 
 <b>Not yet here:</b>
 
-LSTM for Sentiment Analysis
+<strike>LSTM for Sentiment Analysis</strike> I built one for processing a series of numbers instead
 
 RNN-RBM to model and sequence music
 

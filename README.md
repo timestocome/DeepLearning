@@ -32,9 +32,10 @@ Restricted Boltzmann Machine ( no changes )
 
 Deep Belief Network ( very minor changes )
 
-Hybrid Monte-Carlo Sampling
+Hybrid Monte-Carlo Sampling ( no update )
 
 Elman-Recurrent (Python 2.x-3.x and replaced PERL script with slow but working Python)
+                ( clean up code, fix a few bugs )
 
 
 <b>Not yet here:</b>

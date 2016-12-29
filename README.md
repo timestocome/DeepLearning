@@ -40,10 +40,10 @@ Elman-Recurrent (Python 2.x-3.x and replaced PERL script with slow but working P
 
 <strike>LSTM for Sentiment Analysis</strike> I converted the example code to process a series of ints and predict next int in series instead.
 
+RNN-RBM to model and sequence music ( I changed this to handle chars from reading in plain text )
+
+
 <b>Not yet here:</b>
-
-RNN-RBM to model and sequence music
-
 <b>Not in the book:</b>
 
 Deep Reinforcement Learning

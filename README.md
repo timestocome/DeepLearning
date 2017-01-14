@@ -15,27 +15,26 @@ I'm also trying to keep each example net self contained instead of broken into s
 
 *doing a quick brush up on Theano and updating some of these examples with cleaner code
 
-<b>Completed:</b>
 
-Logistic Regression ( updated )
+<strike>Logistic Regression</strike> ( updated )
 
-Multilayer Perceptron ( updated )
+<strike>Multilayer Perceptron</strike> ( updated )
 
-Basic Convolutional Network to filter images ( updated )
+<strike>Basic Convolutional Network to filter images</strike> ( updated )
 
-LeNet5  ( updated, hoping to add QLearning to this to make a deep reinforcement net ) 
+<strike>LeNet5</strike>  ( updated, hoping to add QLearning to this to make a deep reinforcement net ) 
 
-Denoising Autoencoders ( updated )
+<strike>Denoising Autoencoders</strike> ( updated )
 
-Stacked Denoising Autoencoders ( minor changes and testing )
+<strike>Stacked Denoising Autoencoders</strike> ( minor changes and testing )
 
-Restricted Boltzmann Machine ( no changes )
+<strike>Restricted Boltzmann Machine</strike> ( no changes )
 
-Deep Belief Network ( very minor changes )
+<strike>Deep Belief Network</strike> ( very minor changes )
 
-Hybrid Monte-Carlo Sampling ( no update )
+<strike>Hybrid Monte-Carlo Sampling</strike> ( no update )
 
-Elman-Recurrent (Python 2.x-3.x and replaced PERL script with slow but working Python)
+<strike>Elman-Recurrent</strike> (Python 2.x-3.x and replaced PERL script with slow but working Python)
                 ( clean up code, fix a few bugs )
 
 

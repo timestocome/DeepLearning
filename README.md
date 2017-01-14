@@ -44,9 +44,8 @@ Elman-Recurrent (Python 2.x-3.x and replaced PERL script with slow but working P
 <strike>RNN-RBM to model and sequence music</strike> ( I changed this to handle chars from reading in plain text )
 
 
-<b>Not yet here:</b>
 <b>Not in the book:</b>
 
-Deep Reinforcement Learning
+<strike>Deep Reinforcement Learning</strike> (WIP, the Theano code needs streamlining but it works)
 
 

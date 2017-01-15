@@ -22,7 +22,7 @@ Multilayer Perceptron ( updated )
 
 Basic Convolutional Network to filter images ( updated )
 
-LeNet5  ( updated, hoping to add QLearning to this to make a deep reinforcement net ) 
+LeNet5  ( updated ) 
 
 Denoising Autoencoders ( updated )
 

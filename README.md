@@ -16,35 +16,36 @@ I'm also trying to keep each example net self contained instead of broken into s
 *doing a quick brush up on Theano and updating some of these examples with cleaner code
 
 
-<strike>Logistic Regression</strike> ( updated )
+Logistic Regression ( updated )
 
-<strike>Multilayer Perceptron</strike> ( updated )
+Multilayer Perceptron ( updated )
 
-<strike>Basic Convolutional Network to filter images</strike> ( updated )
+Basic Convolutional Network to filter images ( updated )
 
-<strike>LeNet5</strike>  ( updated, hoping to add QLearning to this to make a deep reinforcement net ) 
+LeNet5  ( updated, hoping to add QLearning to this to make a deep reinforcement net ) 
 
-<strike>Denoising Autoencoders</strike> ( updated )
+Denoising Autoencoders ( updated )
 
-<strike>Stacked Denoising Autoencoders</strike> ( minor changes and testing )
+Stacked Denoising Autoencoders ( minor changes and testing )
 
-<strike>Restricted Boltzmann Machine</strike> ( no changes )
+Restricted Boltzmann Machine ( no changes )
 
-<strike>Deep Belief Network</strike> ( very minor changes )
+Deep Belief Network ( very minor changes )
 
-<strike>Hybrid Monte-Carlo Sampling</strike> ( no update )
+Hybrid Monte-Carlo Sampling ( no update )
 
-<strike>Elman-Recurrent</strike> (Python 2.x-3.x and replaced PERL script with slow but working Python)
+Elman-Recurrent (Python 2.x-3.x and replaced PERL script with slow but working Python)
                 ( clean up code, fix a few bugs )
 
 
-<strike>LSTM for Sentiment Analysis</strike> I converted the example code to process a series of ints and predict next int in series instead.
+LSTM for Sentiment Analysis I converted the example code to process a series of ints and predict next int in series instead.
 
-<strike>RNN-RBM to model and sequence music</strike> ( I changed this to handle chars from reading in plain text )
+RNN-RBM to model and sequence music ( I changed this to handle chars from reading in plain text )
 
 
 <b>Not in the book:</b>
 
-<strike>Deep Reinforcement Learning</strike> (WIP, the Theano code needs streamlining but it works)
+Deep Reinforcement Learning (WIP, the Theano code needs streamlining but it works)
 
+Simple RNN to predict parity digit
 

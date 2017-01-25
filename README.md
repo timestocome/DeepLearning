@@ -47,7 +47,5 @@ RNN-RBM to model and sequence music ( I changed this to handle chars from readin
 
 Deep Reinforcement Learning (WIP, the Theano code needs streamlining but it works)
 
-Simple RNN to predict parity digit
-
 Single layer RNN to read in sentences and generate new sentences
 

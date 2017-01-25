@@ -49,3 +49,5 @@ Deep Reinforcement Learning (WIP, the Theano code needs streamlining but it work
 
 Simple RNN to predict parity digit
 
+Single layer RNN to read in sentences and generate new sentences
+

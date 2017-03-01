@@ -1,4 +1,4 @@
-# DeepLearning
+
 Programs written while working through http://deeplearning.net/tutorial/deeplearning.pdf 
 
 Original source code for book and data sources are here https://github.com/lisa-lab/DeepLearningTutorials.git
@@ -15,6 +15,7 @@ I'm also trying to keep each example net self contained instead of broken into s
 
 *doing a quick brush up on Theano and updating some of these examples with cleaner code
 
+<b>Theano examples</b>
 
 Logistic Regression ( updated )
 
@@ -48,4 +49,10 @@ RNN-RBM to model and sequence music ( I changed this to handle chars from readin
 Deep Reinforcement Learning (WIP, the Theano code needs streamlining but it works)
 
 Single layer RNN to read in sentences and generate new sentences
+
+<b>TensorFlow Examples</b>
+
+HelloWorldSeq2Seq.py  ( translates Hello to World )
+
+
 

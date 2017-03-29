@@ -54,5 +54,9 @@ Single layer RNN to read in sentences and generate new sentences
 
 HelloWorldSeq2Seq.py  ( translates Hello to World )
 
+LogisticRegression_tf.py ( cluster some generated data with Logistic Regression )
+
+KMeans_tf ( read in dir of .wav files, compute frequency, notes, histograms, cluster with KMeans )
+
 
 

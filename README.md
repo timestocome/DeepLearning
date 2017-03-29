@@ -52,14 +52,17 @@ Single layer RNN to read in sentences and generate new sentences
 
 <b>TensorFlow Examples</b>
 
-HelloWorldSeq2Seq.py  ( translates Hello to World )
-
 Programs written while working through Manning 'Machine Learning with TensorFlow'
 (https://www.manning.com/books/machine-learning-with-tensorflow )
 
 LogisticRegression_tf ( cluster some generated data with Logistic Regression )
 
 KMeans_tf ( read in dir of .wav files, compute frequency, notes, histograms, cluster with KMeans )
+
+<b>Not in the book:</b>
+
+HelloWorldSeq2Seq.py  ( translates Hello to World )
+
 
 
 

@@ -59,6 +59,8 @@ LogisticRegression_tf ( cluster some generated data with Logistic Regression )
 
 KMeans_tf ( read in dir of .wav files, compute frequency, notes, histograms, cluster with KMeans )
 
+SOM_tf ( Self organizing map that organizes an array of colors )
+
 <b>Not in the book:</b>
 
 HelloWorldSeq2Seq.py  ( translates Hello to World )

@@ -61,6 +61,8 @@ KMeans_tf ( read in dir of .wav files, compute frequency, notes, histograms, clu
 
 SOM_tf ( Self organizing map that organizes an array of colors )
 
+Reinforcement_tf ( random policy example on a single stock price )
+
 <b>Not in the book:</b>
 
 HelloWorldSeq2Seq.py  ( translates Hello to World )

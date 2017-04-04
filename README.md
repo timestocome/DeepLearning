@@ -61,7 +61,7 @@ KMeans_tf ( read in dir of .wav files, compute frequency, notes, histograms, clu
 
 SOM_tf ( Self organizing map that organizes an array of colors )
 
-Reinforcement_tf ( random policy example on a single stock price )
+Reinforcement_tf (Reinforcement ( QLearning) on a single stock )
 
 <b>Not in the book:</b>
 

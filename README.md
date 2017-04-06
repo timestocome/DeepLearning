@@ -17,23 +17,23 @@ I'm also trying to keep each example net self contained instead of broken into s
 
 <b>Theano examples</b>
 
-Logistic Regression ( updated )
+Logistic Regression 
 
-Multilayer Perceptron ( updated )
+Multilayer Perceptron
 
-Basic Convolutional Network to filter images ( updated )
+Basic Convolutional Network to filter images
 
-LeNet5  ( updated ) 
+LeNet5
 
-Denoising Autoencoders ( updated )
+Denoising Autoencoders
 
-Stacked Denoising Autoencoders ( minor changes and testing )
+Stacked Denoising Autoencoders 
 
-Restricted Boltzmann Machine ( no changes )
+Restricted Boltzmann Machine 
 
-Deep Belief Network ( very minor changes )
+Deep Belief Network 
 
-Hybrid Monte-Carlo Sampling ( no update )
+Hybrid Monte-Carlo Sampling 
 
 Elman-Recurrent (Python 2.x-3.x and replaced PERL script with slow but working Python)
                 ( clean up code, fix a few bugs )

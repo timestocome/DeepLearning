@@ -66,6 +66,8 @@ SOM_tf ( Self organizing map that organizes an array of colors )
 
 Reinforcement_tf (Reinforcement ( QLearning) on a single stock )
 
+LSTM_tf (LSTM on airline passenger volume year over year)
+
 <b>Not in the book:</b>
 
 HelloWorldSeq2Seq.py  ( translates Hello to World )

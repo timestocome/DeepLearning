@@ -55,6 +55,9 @@ Single layer RNN to read in sentences and generate new sentences
 Programs written while working through Manning 'Machine Learning with TensorFlow'
 (https://www.manning.com/books/machine-learning-with-tensorflow )
 
+* I'm only posting the examples that I change, you can find all the book code here:
+https://github.com/BinRoot/TensorFlow-Book
+
 LogisticRegression_tf ( cluster some generated data with Logistic Regression )
 
 KMeans_tf ( read in dir of .wav files, compute frequency, notes, histograms, cluster with KMeans )

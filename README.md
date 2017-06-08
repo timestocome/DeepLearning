@@ -73,6 +73,8 @@ LSTM_tf (LSTM on airline passenger volume year over year)
 
 HelloWorldSeq2Seq.py  ( translates Hello to World )
 
+FullyConnectedForwardFeedNetwork.py ( predict next year's sunspots based on past data )
+
 <b>Notes</b>
 That's probably it for this project, I have enough skeleton code to jump start several projects 
 

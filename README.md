@@ -75,6 +75,8 @@ HelloWorldSeq2Seq.py  ( translates Hello to World )
 
 FullyConnectedForwardFeedNetwork.py ( predict next year's sunspots based on past data )
 
+NasdaqPrediction.py ( fully connected forward feed w/ regularization for Nasdaq stock index one month out )
+
 <b>Notes</b>
 That's probably it for this project, I have enough skeleton code to jump start several projects 
 

@@ -16,7 +16,7 @@ I'm also trying to keep each example net self contained instead of broken into s
 
 * see the MachineLearning Resources.md file for a list of tutorials, books etc on Deep Learning 
 
-<b>Theano examples</b>
+<b>--- Theano examples ---</b>
 
 Logistic Regression 
 
@@ -51,7 +51,9 @@ Deep Reinforcement Learning (WIP, the Theano code needs streamlining but it work
 
 Single layer RNN to read in sentences and generate new sentences
 
-<b>TensorFlow Examples</b>
+ResNet Toy example of a deep layer residual network, tested on Iris Data set
+
+<b>--- TensorFlow Examples ---</b>
 
 Programs written while working through Manning 'Machine Learning with TensorFlow'
 (https://www.manning.com/books/machine-learning-with-tensorflow )

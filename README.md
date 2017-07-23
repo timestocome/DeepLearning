@@ -45,7 +45,7 @@ LSTM for Sentiment Analysis I converted the example code to process a series of 
 RNN-RBM to model and sequence music ( I changed this to handle chars from reading in plain text )
 
 
-<b>Not in the book:</b>
+<b>----- Not in the book: -----</b>
 
 Deep Reinforcement Learning (WIP, the Theano code needs streamlining but it works)
 
@@ -71,7 +71,7 @@ Reinforcement_tf (Reinforcement ( QLearning) on a single stock )
 
 LSTM_tf (LSTM on airline passenger volume year over year)
 
-<b>Not in the book:</b>
+<b>----- Not in the book: -----</b>
 
 HelloWorldSeq2Seq.py  ( translates Hello to World )
 

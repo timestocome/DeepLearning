@@ -51,7 +51,7 @@ Deep Reinforcement Learning (WIP, the Theano code needs streamlining but it work
 
 Single layer RNN to read in sentences and generate new sentences
 
-ResNet Toy example of a deep layer residual network, tested on Iris Data set
+ResNet example of a deep layer residual network, tested on Iris Data set
 
 <b>--- TensorFlow Examples ---</b>
 

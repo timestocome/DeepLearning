@@ -22,6 +22,8 @@ Logistic Regression
 
 Multilayer Perceptron
 
+Simple Multilayer Perceptron ( stripped down version )
+
 Basic Convolutional Network to filter images
 
 LeNet5

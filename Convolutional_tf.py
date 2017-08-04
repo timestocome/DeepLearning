@@ -1,19 +1,25 @@
 
 # http://github.com/timestocome
 
-# simple example from Machine Learning with TF book
-# https://www.manning.com/books/machine-learning-with-tensorflow
-
-# I only made very tiny adjustments to this you can find his
-# orignal code here:
-# https://github.com/BinRoot/TensorFlow-Book/
-# dataset from https://www.cs.toronto.edu/~kriz/cifar-10- python.tar.gz
 
 
 import pickle
 import numpy as np
 import tensorflow as tf
-import matplotlib.pyplot as plt
+import sys
+
+
+# made some minor improvements, cleaned up code
+
+# started with simple example from Machine Learning with TF book
+# https://www.manning.com/books/machine-learning-with-tensorflow
+
+
+
+
+# dataset from https://www.cs.toronto.edu/~kriz/cifar-10- python.tar.gz
+
+
 
 
 #######################################################################
@@ -91,27 +97,44 @@ names, data, labels = read_data('./cifar-10-batches-py')
 print(data.shape)
 
 
+
+
+
 ######################################################################
 # network
 #####################################################################
+n_layer1_filters = 64
+n_layer2_filters = 32
+filter1_size = 5
+filter2_size = 4
+image_width = 24
+image_height = 24
+n_hidden = 512
+
+
+n_batches = 200
+n_epochs = 10
+
+
+
 # inputs and outputs
-x = tf.placeholder(tf.float32, [None, 24 * 24])     # 24x24 images
+x = tf.placeholder(tf.float32, [None, image_height * image_width])     # 24x24 images
 y = tf.placeholder(tf.float32, [None, len(names)])  # number of names = number of categories
 
 # 64 - 5x5 convolutional filters applied to input
-W1 = tf.Variable(tf.random_normal([5, 5, 1, 64]))
-b1 = tf.Variable(tf.random_normal([64]))
+W1 = tf.Variable(tf.random_normal([filter1_size, filter1_size, 1, n_layer1_filters]))
+b1 = tf.Variable(tf.random_normal([n_layer1_filters]))
 
 # 64, 5x5 convolution filters applied to layer 1 output
-W2 = tf.Variable(tf.random_normal([5, 5, 64, 64]))
-b2 = tf.Variable(tf.random_normal([64]))
+W2 = tf.Variable(tf.random_normal([filter2_size, filter2_size, n_layer1_filters, n_layer2_filters]))
+b2 = tf.Variable(tf.random_normal([n_layer2_filters]))
 
 # fully connected layer
-W3 = tf.Variable(tf.random_normal([6 * 6 * 64, 1024]))
-b3 = tf.Variable(tf.random_normal([1024]))
+W3 = tf.Variable(tf.random_normal([6 * 6 * n_layer2_filters, n_hidden]))
+b3 = tf.Variable(tf.random_normal([n_hidden]))
 
 # fully connected output layer
-W_out = tf.Variable(tf.random_normal([1024, len(names)]))
+W_out = tf.Variable(tf.random_normal([n_hidden, len(names)]))
 b_out = tf.Variable(tf.random_normal([len(names)]))
 
 
@@ -132,7 +155,7 @@ def maxpool_layer(conv, k=2):
 
 def model():
 
-    x_reshaped = tf.reshape(x, shape=[-1, 24, 24, 1])
+    x_reshaped = tf.reshape(x, shape=[-1, image_height, image_width, 1])
 
     # perform 1st convolution on input data
     conv_out1 = conv_layer(x_reshaped, W1, b1) 
@@ -141,6 +164,8 @@ def model():
 
     # perform 2nd convolution on 1st layer output
     conv_out2 = conv_layer(norm1, W2, b2)
+    # local response normalization 
+    # https://www.tensorflow.org/api_docs/python/tf/nn/local_response_normalization
     norm2 = tf.nn.lrn(conv_out2, 4, bias=1.0, alpha=0.001 / 9.0, beta=0.75) 
     maxpool_out2 = maxpool_layer(norm2)
 
@@ -174,10 +199,10 @@ with tf.Session() as sess:
     onehot_labels = tf.one_hot(labels, len(names), on_value=1., off_value=0., axis=-1) 
     onehot_vals = sess.run(onehot_labels)
 
-    batch_size = len(data) // 200
+    batch_size = len(data) // n_batches
     print('batch size', batch_size)
+    sys.stdout.flush()
 
-    n_epochs = 10
 
     for j in range(n_epochs): 
 
@@ -187,4 +212,6 @@ with tf.Session() as sess:
             _, accuracy_val = sess.run([train_op, accuracy], feed_dict={x: batch_data, y:batch_onehot_vals})
      
             
+
         print('Epoch: ', j, accuracy_val * 100. )
+        sys.stdout.flush() # force printing

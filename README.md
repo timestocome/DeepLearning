@@ -73,6 +73,8 @@ Reinforcement_tf (Reinforcement ( QLearning) on a single stock )
 
 LSTM_tf (LSTM on airline passenger volume year over year)
 
+Convolutional_tf ( simple convolutional to label images )
+
 <b>----- Not in the book: -----</b>
 
 HelloWorldSeq2Seq.py  ( translates Hello to World )

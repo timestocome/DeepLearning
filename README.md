@@ -77,11 +77,11 @@ Convolutional_tf ( simple convolutional to label images )
 
 <b>----- Not in the book: -----</b>
 
-HelloWorldSeq2Seq.py  ( translates Hello to World )
+HelloWorldSeq2Seq.py  ( translates Hello to World in TensorFlow )
 
-FullyConnectedForwardFeedNetwork.py ( predict next year's sunspots based on past data )
+FullyConnectedForwardFeedNetwork.py ( predict next year's sunspots based on past data in Theano )
 
-NasdaqPrediction.py ( fully connected forward feed w/ regularization for Nasdaq stock index one month out )
+NasdaqPrediction.py ( fully connected forward feed w/ regularization for Nasdaq stock index one month out  in Theano )
 
 MLP_tf.py ( a very simple MultiLayer Perceptron in TensorFlow )
 

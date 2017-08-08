@@ -83,5 +83,5 @@ FullyConnectedForwardFeedNetwork.py ( predict next year's sunspots based on past
 
 NasdaqPrediction.py ( fully connected forward feed w/ regularization for Nasdaq stock index one month out )
 
-
+MLP_tf.py ( a very simple MultiLayer Perceptron in TensorFlow )
 

@@ -85,3 +85,5 @@ NasdaqPrediction.py ( fully connected forward feed w/ regularization for Nasdaq 
 
 MLP_tf.py ( a very simple MultiLayer Perceptron in TensorFlow )
 
+Residual_1DConvolution.py ( tf 1 layer version of the residual convolutional network described in Ng's paper ) 
+

@@ -87,3 +87,6 @@ MLP_tf.py ( a very simple MultiLayer Perceptron in TensorFlow )
 
 Residual_1DConvolution.py ( tf 1 layer version of the residual convolutional network described in Ng's paper ) 
 
+SantaFe_QLearning_tf ( Q learning table on SantaFe Ant Maze )
+
+

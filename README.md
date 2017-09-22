@@ -75,6 +75,9 @@ LSTM_tf (LSTM on airline passenger volume year over year)
 
 Convolutional_tf ( simple convolutional to label images )
 
+Reinforcement Learning ( teach a robot to avoid obstacles https://github.com/timestocome/RaspberryPi/tree/master/ObstacleAvoidance )
+
+
 <b>----- Not in the book: -----</b>
 
 HelloWorldSeq2Seq.py  ( translates Hello to World in TensorFlow )

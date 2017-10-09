@@ -22,6 +22,8 @@ Run through the <a href="https://www.kaggle.com">Kaggle</a> tutorial and try sol
 
 <a href="http://www.deeplearningbook.org/">Deep Learning Book</a>
 
+<a href="https://www.youtube.com/playlist?list=PLoRl3Ht4JOcdU872GhiYWf6jwrk_SNhz9">Hinton, Neural Networks for Machine Learning Lecture Series</a>
+
 <b>Recurrent Networks</b>
 
 <a href="http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/">WildML Recurrent Neural Networks tutorial</a>

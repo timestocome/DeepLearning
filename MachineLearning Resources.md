@@ -40,6 +40,15 @@ Run through the <a href="https://www.kaggle.com">Kaggle</a> tutorial and try sol
 
 <a href="https://codelabs.developers.google.com/codelabs/cloud-tensorflow-mnist/#0">TensorFlow and deep learning without a PhD</a>
 
+<a href="https://codelabs.developers.google.com/codelabs/tensorflow-for-poets/#0">TensorFlow for Poets</a>
+
+<a href="https://www.manning.com/books/machine-learning-with-tensorflow">Machine Learning with TensorFlow ( book ) $</a>
+
+<a href="http://web.stanford.edu/class/cs20si/syllabus.html">Stanford CS 20SI: Tensorflow for Deep Learning Research</a>
+
+<a href="https://www.youtube.com/watch?v=g-EvyKpZjmQ">YouTube video lectures based on CS 20SI</a>
+
+
 <b>Papers with source code</b>
 
 <a href="http://www.gitxiv.com">GitXiv</a>

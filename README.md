@@ -5,7 +5,7 @@ Original source code for book and data sources are here https://github.com/lisa-
 
 Theano documentation is here: http://deeplearning.net/software/theano/#documentation
 
-
+Updated list of sources I used to learn machine learning and deep learning: https://github.com/timestocome/Test-stock-prediction-algorithms
 
 This is a place to store the code I write while working through "Deep Learning Tutorial"
 

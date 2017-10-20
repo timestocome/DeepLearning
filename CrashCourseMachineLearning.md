@@ -2,7 +2,7 @@
 
 
 
-# Crash Course Machine Learning Syllabus<
+# Crash Course Machine Learning Syllabus
 
 
 - If you already have a strong science, math and programming background you can teach yourself machine learning in a relatively short time.

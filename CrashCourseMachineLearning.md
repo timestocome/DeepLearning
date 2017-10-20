@@ -1,12 +1,12 @@
 <html>
-<html>
 <head>
 <title>Crash Course Machine Learning</title>
+
+
 <style>
 body {}
 
 h1 {color:#34495E;}
-
 
 a:link {color:#34495E; font-size:100%; line-height:140%;} 
 a:visited {color:#34495E;}

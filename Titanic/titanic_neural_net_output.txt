@@ -1,0 +1,91 @@
+
+
+# https://github.com/timestocome
+
+# titanic_neural_net.py output
+
+
+runfile('/Users/ljcobb/Desktop/Titanic/titanic_neural_net.py', wdir='/Users/ljcobb/Desktop/Titanic')
+data correlation
+Major           0.009503
+Ms              0.009503
+Col             0.013449
+Q               0.016071
+Dr              0.019049
+Don             0.021737
+Jonkheer        0.021737
+Capt            0.021737
+Deck T          0.021737
+Deck G          0.027787
+Deck A          0.031761
+Mme             0.035171
+Lady            0.035171
+Sir             0.035171
+Dona            0.035171
+Countess        0.035171
+Lower 2nd       0.036875
+Mlle            0.049758
+Class 2         0.050790
+age             0.050863
+Master          0.057436
+Rev             0.061648
+Deck F          0.062305
+Upper 2nd       0.081379
+Lower 1st       0.099461
+Relatives       0.105681
+Deck D          0.123210
+Deck C          0.128470
+Deck E          0.129436
+Upper 3rd       0.129602
+S               0.154558
+Deck B          0.160478
+Parent_Child    0.173428
+Lower 3rd       0.181378
+C               0.182123
+Upper 1st       0.215860
+Class 1         0.279449
+Class 3         0.283428
+Miss            0.302225
+Mrs             0.350699
+Sex             0.528693
+Mr              0.529016
+Survived        1.000000
+Drowned         1.000000
+Name: Survived, dtype: float64
+survivors 0.38 0.38 0.38
+n_features 43
+z 0
+Test 178 / 196  Accuracy ~ 0.91
+Holdout 182 / 197  Accuracy ~ 0.92
+z 1
+Test 192 / 196  Accuracy ~ 0.98
+Holdout 195 / 197  Accuracy ~ 0.99
+-----------------------------    saving network...
+z 2
+Test 189 / 196  Accuracy ~ 0.96
+Holdout 194 / 197  Accuracy ~ 0.98
+-----------------------------    saving network...
+z 3
+Test 190 / 196  Accuracy ~ 0.97
+Holdout 195 / 197  Accuracy ~ 0.99
+-----------------------------    saving network...
+z 4
+Test 190 / 196  Accuracy ~ 0.97
+Holdout 195 / 197  Accuracy ~ 0.99
+-----------------------------    saving network...
+z 5
+Test 196 / 196  Accuracy ~ 1.00
+Holdout 197 / 197  Accuracy ~ 1.00
+-----------------------------    saving network...
+z 6
+Test 194 / 196  Accuracy ~ 0.99
+Holdout 196 / 197  Accuracy ~ 0.99
+-----------------------------    saving network...
+z 7
+Test 177 / 196  Accuracy ~ 0.90
+Holdout 180 / 197  Accuracy ~ 0.91
+z 8
+Test 196 / 196  Accuracy ~ 1.00
+Holdout 196 / 197  Accuracy ~ 0.99
+-----------------------------    saving network...
+z 9

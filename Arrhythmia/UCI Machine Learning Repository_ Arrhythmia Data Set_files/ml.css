@@ -1,0 +1,49 @@
+textarea { 
+	width: 95%; 
+	text-align: left; 
+	height: 49;
+}
+.whitetext, .whitetext a, .whitetext a:visited {
+	color:#FFFFFF;
+	font-size:10pt;
+	font-family: Arial, Helvetica, sans-serif; 
+}
+.normal, .normal a, .normal a:visited  {
+	font-size:10pt;
+	font-family: Arial, Helvetica, sans-serif; 
+	color:#123654;
+}
+.heading, .heading a, .heading a:visited 
+{
+	font-size:20pt;
+	font-family: Arial, Helvetica, sans-serif;
+	color:#123654;
+}
+.small-heading, .small-heading a, .small-heading a:visited {
+	font-size:12pt;
+	font-family: Arial, Helvetica, sans-serif;
+	color:#123654;
+
+}
+
+.big, .big a, .big a:visited {
+	font-size:14pt;
+	font-family: Arial, Helvetica, sans-serif;
+	color:#123654;
+
+}
+
+.almostbig, .almostbig a, .almostbig a:visited {
+	font-size:12pt;
+	font-family: Arial, Helvetica, sans-serif;
+	color:#123654;
+
+}
+
+.bigwhite, .bigwhite a, .bigwhite a:visited {
+	font-size:14pt;
+	font-family: Arial, Helvetica, sans-serif;
+	color:#FFFFFF;
+}
+
+

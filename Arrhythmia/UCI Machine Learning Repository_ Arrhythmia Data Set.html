@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)http://archive.ics.uci.edu/ml/datasets/Arrhythmia -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>UCI Machine Learning Repository: Arrhythmia Data Set</title>
+
+<!-- Stylesheet link -->
+<link rel="stylesheet" type="text/css" href="./UCI Machine Learning Repository_ Arrhythmia Data Set_files/ml.css">
+
+<script language="JavaScript" type="text/javascript">
+<!--
+function checkform ( form )
+{
+  // see http://www.thesitewizard.com/archive/validation.shtml
+  // for an explanation of this script and how to use it on your
+  // own website
+
+  // ** START **
+  if (form.q.value == "")
+  {
+    alert( "Please enter search terms." );
+    form.q.focus();
+    return false ;
+  }
+
+  if (getCheckedValue(form.sitesearch) == "ics.uci.edu" && form.q.value.indexOf("site:archive.ics.uci.edu/ml") == -1)
+  {
+    form.q.value = form.q.value + " site:archive.ics.uci.edu/ml";
+  }
+
+  // ** END **
+  return true ;
+}
+
+// return the value of the radio button that is checked
+// return an empty string if none are checked, or
+// there are no radio buttons
+function getCheckedValue(radioObj) {
+	if(!radioObj)
+		return "";
+	var radioLength = radioObj.length;
+	if(radioLength == undefined)
+		if(radioObj.checked)
+			return radioObj.value;
+		else
+			return "";
+	for(var i = 0; i < radioLength; i++) {
+		if(radioObj[i].checked) {
+			return radioObj[i].value;
+		}
+	}
+	return "";
+}
+//-->
+</script>
+
+<style>@media print {#ghostery-purple-box {display:none !important}}</style></head>
+
+<body>
+
+
+<!-- SITE HEADER (INCLUDES LOGO AND SEARCH BOX) -->
+
+<table width="100%" bgcolor="#003366">
+<tbody><tr>
+	<td>
+		<span class="normal"><a href="http://archive.ics.uci.edu/ml/index.html" alt="Home"><img src="./UCI Machine Learning Repository_ Arrhythmia Data Set_files/logo.gif" border="0"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://cml.ics.uci.edu/"><font color="FFDD33">Center for Machine Learning and Intelligent Systems</font></a></span>
+	</td>
+	<td width="100%" valign="top" align="right">
+		<span class="whitetext">
+		<a href="http://archive.ics.uci.edu/ml/about.html">About</a>&nbsp;
+		<a href="http://archive.ics.uci.edu/ml/citation_policy.html">Citation Policy</a>&nbsp;
+		<a href="http://archive.ics.uci.edu/ml/donation_policy.html">Donate a Data Set</a>&nbsp;
+		<a href="http://archive.ics.uci.edu/ml/contact.html">Contact</a>
+		</span>
+
+		<br>
+		<br>
+		<!-- Search Google -->
+
+		<form method="GET" action="http://www.google.com/custom" onsubmit="return checkform(this);">
+		<input type="text" name="q" size="30" maxlength="255" value="">
+		<input type="submit" name="sa" value="Search">
+		<input type="hidden" name="cof" value="AH:center;LH:130;L:http://archive.ics.uci.edu/assets/logo.gif;LW:384;AWFID:869c0b2eaa8d518e;">
+		<input type="hidden" name="domains" value="ics.uci.edu">
+		<br>
+		<input type="radio" name="sitesearch" value="ics.uci.edu" checked=""> <span class="whitetext"><font size="1">Repository</font></span>
+		<input type="radio" name="sitesearch" value=""> <span class="whitetext"><font size="1">Web</font></span>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<a href="http://www.google.com/search"><img src="./UCI Machine Learning Repository_ Arrhythmia Data Set_files/Logo_25blk.gif" border="0" alt="Google" align="middle" height="27"></a>
+		<br>
+		</form>
+		<!-- Search Google -->
+
+
+		<span class="whitetext"><a href="http://archive.ics.uci.edu/ml/datasets.html"><font size="3" color="#FFDD33"><b>View
+ALL Data Sets</b></font></a></span>
+		<br>
+	</td>
+</tr>
+</tbody></table>
+
+
+<br>
+<table width="100%" border="0" cellpadding="2"><tbody><tr><td>
+
+   <table><tbody><tr>
+     <td valign="top">
+	<p>
+	<span class="heading"><b>Arrhythmia Data Set</b></span>
+	<br><span class="normal"><i><font size="4">Download</font></i>: <a href="http://archive.ics.uci.edu/ml/machine-learning-databases/arrhythmia/"><font style="BACKGROUND-COLOR: #FFFFAA" size="4">Data Folder</font></a>, <a href="http://archive.ics.uci.edu/ml/machine-learning-databases/arrhythmia/arrhythmia.names"><font style="BACKGROUND-COLOR: #FFFFAA" size="4">Data Set Description</font></a></span></p>
+
+	<p class="normal"><b>Abstract</b>: Distinguish between the presence and absence of cardiac arrhythmia and classify it in one of the 16 groups.</p>
+     </td>
+     <td><img src="./UCI Machine Learning Repository_ Arrhythmia Data Set_files/Large5.jpg" hspace="20" vspace="10"> </td>
+   </tr></tbody></table>
+
+<table border="1" cellpadding="6">
+	<tbody><tr>
+		<td bgcolor="#DDEEFF"><p class="normal"><b>Data Set Characteristics:&nbsp;&nbsp;</b></p></td>
+		<td><p class="normal">Multivariate</p></td>
+		<td bgcolor="#DDEEFF"><p class="normal"><b>Number of Instances:</b></p></td>
+		<td><p class="normal">452</p></td>
+		<td bgcolor="#DDEEFF"><p class="normal"><b>Area:</b></p></td>
+		<td><p class="normal">Life</p></td>
+	</tr>
+
+	<tr>
+		<td bgcolor="#DDEEFF"><p class="normal"><b>Attribute Characteristics:</b></p></td>
+		<td><p class="normal">Categorical, Integer, Real</p></td>
+		<td bgcolor="#DDEEFF"><p class="normal"><b>Number of Attributes:</b></p></td>
+		<td><p class="normal">279</p></td>
+		<td bgcolor="#DDEEFF"><p class="normal"><b>Date Donated</b></p></td>
+		<td><p class="normal">1998-01-01</p></td>
+	</tr>
+	<tr>
+		<td bgcolor="#DDEEFF"><p class="normal"><b>Associated Tasks:</b></p></td>
+		<td><p class="normal">Classification</p></td>
+		<td bgcolor="#DDEEFF"><p class="normal"><b>Missing Values?</b></p></td>
+		<td><p class="normal">Yes</p></td>
+		<td bgcolor="#DDEEFF"><p class="normal"><b>Number of Web Hits:</b></p></td>
+		<td><p class="normal">225277</p></td>
+	</tr>
+	<!--
+	<tr>
+
+		<td bgcolor="#DDEEFF"><p class="normal"><b>Highest Percentage Achieved:&nbsp;&nbsp;</b></p></td>
+		<td><p class="normal">N/A</p></td>
+	</tr>
+	-->
+</tbody></table>
+
+
+<br>
+
+<p class="small-heading"><b>Source:</b></p>
+<p class="normal">Original Owners of Database:
+<br>
+<br>1. H. Altay Guvenir, PhD., 
+<br>Bilkent University,
+<br>Department of Computer Engineering and Information Science,
+<br>06533 Ankara, Turkey
+<br>Phone: +90 (312) 266 4133
+<br>Email: <u>guvenir <b>'@'</b> cs.bilkent.edu.tr</u>
+<br>
+<br>2. Burak Acar, M.S.,
+<br>Bilkent University, 
+<br>EE Eng. Dept. 
+<br>06533 Ankara, Turkey
+<br>Email: <u>buraka <b>'@'</b> ee.bilkent.edu.tr</u>
+<br>
+<br>3. Haldun Muderrisoglu, M.D., Ph.D., 
+<br>Baskent University, 
+<br>School of Medicine
+<br>Ankara, Turkey
+<br>
+<br>Donor: 
+<br>
+<br>H. Altay Guvenir
+<br>Bilkent University,
+<br>Department of Computer Engineering and Information Science,
+<br>06533 Ankara, Turkey
+<br>Phone: +90 (312) 266 4133
+<br>Email: <u>guvenir <b>'@'</b> cs.bilkent.edu.tr</u></p>
+
+<br>
+
+<p class="small-heading"><b>Data Set Information:</b></p>
+<p class="normal">This database contains 279 attributes, 206 of which are linear valued and the rest are nominal. 
+<br>
+<br>Concerning the study of H. Altay Guvenir: "The aim is to distinguish between the presence and absence of cardiac arrhythmia and to classify it in one of the 16 groups. Class 01 refers to 'normal' ECG classes 02 to 15 refers to different classes of arrhythmia and class 16 refers to the rest of unclassified ones. For the time being, there exists a computer program that makes such a classification. However there are differences between the cardiolog's and the programs classification. Taking the cardiolog's as a gold standard we aim to minimise this difference by means of machine learning tools."
+<br>
+<br>The names and id numbers of the patients were recently removed from the database.
+<br>
+<br></p>
+
+<br>
+
+<p class="small-heading"><b>Attribute Information:</b></p>
+<p class="normal">   -- Complete attribute documentation:
+<br>      1 Age: Age in years , linear
+<br>      2 Sex: Sex (0 = male; 1 = female) , nominal
+<br>      3 Height: Height in centimeters , linear
+<br>      4 Weight: Weight in kilograms , linear
+<br>      5 QRS duration: Average of QRS duration in msec., linear
+<br>      6 P-R interval: Average duration between onset of P and Q waves in msec., linear
+<br>      7 Q-T interval: Average duration between onset of Q and offset of T waves in msec., linear
+<br>      8 T interval: Average duration of T wave in msec., linear
+<br>      9 P interval: Average duration of P wave in msec., linear
+<br>      Vector angles in degrees on front plane of:, linear
+<br>     10 QRS
+<br>     11 T
+<br>     12 P
+<br>     13 QRST
+<br>     14 J
+<br>
+<br>     15 Heart rate: Number of heart beats per minute ,linear
+<br>    
+<br>     Of channel DI:
+<br>      Average width, in msec., of: linear
+<br>      16 Q wave
+<br>      17 R wave
+<br>      18 S wave
+<br>      19 R' wave, small peak just after R
+<br>      20 S' wave
+<br>
+<br>      21 Number of intrinsic deflections, linear
+<br>
+<br>      22 Existence of ragged R wave, nominal
+<br>      23 Existence of diphasic derivation of R wave, nominal
+<br>      24 Existence of ragged P wave, nominal
+<br>      25 Existence of diphasic derivation of P wave, nominal
+<br>      26 Existence of ragged T wave, nominal
+<br>      27 Existence of diphasic derivation of T wave, nominal
+<br>
+<br>     Of channel DII: 
+<br>      28 .. 39 (similar to 16 .. 27 of channel DI)
+<br>     Of channels DIII:
+<br>      40 .. 51
+<br>     Of channel AVR:
+<br>      52 .. 63
+<br>     Of channel AVL:
+<br>      64 .. 75
+<br>     Of channel AVF:
+<br>      76 .. 87
+<br>     Of channel V1:
+<br>      88 .. 99
+<br>     Of channel V2:
+<br>      100 .. 111
+<br>     Of channel V3:
+<br>      112 .. 123
+<br>     Of channel V4:
+<br>      124 .. 135
+<br>     Of channel V5:
+<br>      136 .. 147
+<br>     Of channel V6:
+<br>      148 .. 159
+<br>
+<br>     Of channel DI:
+<br>      Amplitude , * 0.1 milivolt, of
+<br>      160 JJ wave, linear
+<br>      161 Q wave, linear
+<br>      162 R wave, linear
+<br>      163 S wave, linear
+<br>      164 R' wave, linear
+<br>      165 S' wave, linear
+<br>      166 P wave, linear
+<br>      167 T wave, linear
+<br>      
+<br>      168 QRSA , Sum of areas of all segments divided by 10, ( Area= width * height / 2 ), linear
+<br>      169 QRSTA = QRSA + 0.5 * width of T wave * 0.1 * height of T wave. (If T is diphasic then the bigger segment is considered), linear
+<br>
+<br>     Of channel DII:
+<br>      170 .. 179
+<br>     Of channel DIII:
+<br>      180 .. 189
+<br>     Of channel AVR:
+<br>      190 .. 199
+<br>     Of channel AVL:
+<br>      200 .. 209
+<br>     Of channel AVF:
+<br>      210 .. 219
+<br>     Of channel V1:
+<br>      220 .. 229
+<br>     Of channel V2:
+<br>      230 .. 239
+<br>     Of channel V3:
+<br>      240 .. 249
+<br>     Of channel V4:
+<br>      250 .. 259
+<br>     Of channel V5:
+<br>      260 .. 269
+<br>     Of channel V6:
+<br>      270 .. 279</p>
+
+<br>
+
+<p class="small-heading"><b>Relevant Papers:</b></p>
+<p class="normal">H. Altay Guvenir, Burak Acar, Gulsen Demiroz, Ayhan Cekin "A Supervised Machine Learning Algorithm for Arrhythmia Analysis."  Proceedings of the Computers in Cardiology Conference, Lund, Sweden, 1997.
+<br><a href="http://rexa.info/paper/b782bc985b0dd750c9edf8f0191120adb68d1859">[Web Link]</a>
+<br></p>
+
+<br>
+
+
+<!-- OLD CODE:
+
+<p class="small-heading"><b>Papers That Cite This Data Set<sup>1</sup>:</b></p>
+<img src="../assets/rexa.jpg" />
+<p class="normal">Krista Lagus and Esa Alhoniemi and Jeremias Seppa and Antti Honkela and Arno Wagner. <a
+href="http://rexa.info/paper/e3fb3565af764647303c58f32b57a23f9eae18c0">INDEPENDENT VARIABLE GROUP ANALYSIS IN LEARNING COMPACT REPRESENTATIONS FOR DATA</a>. Neural Networks Research Centre, Helsinki University of Technology.  [<a
+href="../support/Arrhythmia#e3fb3565af764647303c58f32b57a23f9eae18c0">View Context</a>].<br><br>Gisele L. Pappa and Alex Alves Freitas and Celso A A Kaestner. <a
+href="http://rexa.info/paper/1a387e912f3bd68e66957cdfdebbb068ffc2149a">AMultiobjective Genetic Algorithm for Attribute Selection</a>. Computing Laboratory Pontificia Universidade Catolica do Parana University of Kent at Canterbury.  [<a
+href="../support/Arrhythmia#1a387e912f3bd68e66957cdfdebbb068ffc2149a">View Context</a>].<br><br>Shay Cohen and Eytan Ruppin and Gideon Dror. <a
+href="http://rexa.info/paper/811517480cb8dca1073ee39a37c9a343a1179aab">Feature Selection Based on the Shapley Value</a>. School of Computer Sciences Tel-Aviv University.  [<a
+href="../support/Arrhythmia#811517480cb8dca1073ee39a37c9a343a1179aab">View Context</a>].<br><br></p>
+
+-->
+
+<p class="small-heading"><b>Papers That Cite This Data Set<sup>1</sup>:</b></p>
+<img src="./UCI Machine Learning Repository_ Arrhythmia Data Set_files/rexa.jpg"><p class="normal">Krista Lagus and Esa Alhoniemi and Jeremias Seppa and Antti Honkela and Arno Wagner. <a href="http://rexa.info/paper/e3fb3565af764647303c58f32b57a23f9eae18c0">INDEPENDENT VARIABLE GROUP ANALYSIS IN LEARNING COMPACT REPRESENTATIONS FOR DATA</a>. Neural Networks Research Centre, Helsinki University of Technology.  [<a href="http://archive.ics.uci.edu/ml/support/Arrhythmia#e3fb3565af764647303c58f32b57a23f9eae18c0">View Context</a>].<br><br>Gisele L. Pappa and Alex Alves Freitas and Celso A A Kaestner. <a href="http://rexa.info/paper/1a387e912f3bd68e66957cdfdebbb068ffc2149a">AMultiobjective Genetic Algorithm for Attribute Selection</a>. Computing Laboratory Pontificia Universidade Catolica do Parana University of Kent at Canterbury.  [<a href="http://archive.ics.uci.edu/ml/support/Arrhythmia#1a387e912f3bd68e66957cdfdebbb068ffc2149a">View Context</a>].<br><br>Shay Cohen and Eytan Ruppin and Gideon Dror. <a href="http://rexa.info/paper/811517480cb8dca1073ee39a37c9a343a1179aab">Feature Selection Based on the Shapley Value</a>. School of Computer Sciences Tel-Aviv University.  [<a href="http://archive.ics.uci.edu/ml/support/Arrhythmia#811517480cb8dca1073ee39a37c9a343a1179aab">View Context</a>].<br><br></p>
+
+<br>
+
+<p class="small-heading"><b>Citation Request:</b></p>
+<p class="normal">Please refer to the Machine Learning
+Repository's <a href="http://archive.ics.uci.edu/ml/citation_policy.html">citation policy</a></p>
+
+</td></tr></tbody></table>
+
+
+<hr>
+
+<!-- OLD CODE:
+<p class="normal"><font size=1>[1] Papers were automatically harvested and associated with this data set, in collaboration with <a href="http://rexa.info"><font size=1>Rexa.info</font></a></font></p>
+-->
+
+<p class="normal"><font size="1">[1] Papers were automatically harvested and associated with this data set, in collaboration
+with <a href="http://rexa.info/"><font size="1">Rexa.info</font></a></font></p>
+
+<table cellpadding="5" align="center"><tbody><tr valign="center">
+		<td><p class="normal">Supported By:</p></td>
+        <td><img src="./UCI Machine Learning Repository_ Arrhythmia Data Set_files/nsfe.gif" height="60"> </td>
+        <td><p class="normal">&nbsp;In Collaboration With:</p></td>
+        <td><img src="./UCI Machine Learning Repository_ Arrhythmia Data Set_files/rexaSmall.jpg"></td>
+</tr></tbody></table>
+
+<center>
+<span class="normal">
+<a href="http://archive.ics.uci.edu/ml/about.html">About</a>&nbsp;&nbsp;||&nbsp;
+<a href="http://archive.ics.uci.edu/ml/citation_policy.html">Citation Policy</a>&nbsp;&nbsp;||&nbsp;
+<a href="http://archive.ics.uci.edu/ml/donation_policy.html">Donation Policy</a>&nbsp;&nbsp;||&nbsp;
+<a href="http://archive.ics.uci.edu/ml/contact.html">Contact</a>&nbsp;&nbsp;||&nbsp;
+<a href="http://cml.ics.uci.edu/">CML</a>
+</span>
+</center>
+
+
+
+
+
+
+</body></html>
